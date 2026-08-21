@@ -34,28 +34,27 @@
           <b>Descargar</b>
         </a>
 
-        <button id="btnTablas" class="download-card download-pending" type="button" disabled>
+        <button id="btnTablas" class="download-card" type="button">
           <span class="download-icon">📄</span>
           <span>
             <strong>Tablas de lotería</strong>
             <small>PDF comprado</small>
           </span>
-          <b>Preparando</b>
+          <b>Generar PDF</b>
         </button>
 
-        <button id="btnMazo" class="download-card download-pending" type="button" disabled hidden>
+        <button id="btnMazo" class="download-card" type="button" hidden>
           <span class="download-icon">🃏</span>
           <span>
             <strong>Mazo de 54 cartas</strong>
             <small>PDF imprimible</small>
           </span>
-          <b>Preparando</b>
+          <b>Generar PDF</b>
         </button>
       </div>
 
       <p class="download-notice" id="mensajeGenerador">
-        La autorización de descarga ya quedó protegida. Falta conectar las imágenes
-        originales limpias al generador de PDF.
+        Tus archivos se generan con las imágenes originales y un enlace temporal protegido.
       </p>
     </section>
 
@@ -75,7 +74,9 @@
     const resumen = document.getElementById("resumenPago");
     const descargas = document.getElementById("descargas");
     const btnGuia = document.getElementById("btnGuia");
+    const btnTablas = document.getElementById("btnTablas");
     const btnMazo = document.getElementById("btnMazo");
+    const mensajeGenerador = document.getElementById("mensajeGenerador");
 
     if (!paymentId) {
         titulo.textContent = "No pudimos identificar el pago";
@@ -109,6 +110,7 @@
         resumen.hidden = false;
         resumen.innerHTML = `
             <div class="result-row"><span>Tablas</span><strong>${p.cantidad}</strong></div>
+            <div class="result-row"><span>Diseño</span><strong>${({tradicional:"Tradicional",animada:"Animada",gorditos:"Gorditos"}[p.diseno] || p.diseno)}</strong></div>
             <div class="result-row"><span>Formato</span><strong>${p.formato.toUpperCase()}</strong></div>
             <div class="result-row"><span>Mazo</span><strong>${p.agregarMazo ? "Sí" : "No"}</strong></div>
             <div class="result-row"><span>Total pagado</span><strong>$${p.total} MXN</strong></div>
@@ -123,6 +125,43 @@
         if (p.agregarMazo) {
             btnMazo.hidden = false;
         }
+
+        const generar = async (boton, endpoint, textoInicial) => {
+            if (boton.dataset.generando === "1") return;
+            boton.dataset.generando = "1";
+            boton.disabled = true;
+            const etiqueta = boton.querySelector("b");
+            const anterior = etiqueta.textContent;
+            etiqueta.textContent = "Generando…";
+            mensajeGenerador.textContent = textoInicial;
+
+            try {
+                const rr = await fetch(`${endpoint}?token=${encodeURIComponent(data.token)}`);
+                const dd = await rr.json();
+                if (!rr.ok || !dd.url) throw new Error(dd.error || "No se pudo generar el archivo.");
+                etiqueta.textContent = "Descargar";
+                mensajeGenerador.textContent = "Archivo listo. El enlace de descarga es temporal por seguridad.";
+                window.location.href = dd.url;
+            } catch (err) {
+                etiqueta.textContent = anterior;
+                mensajeGenerador.textContent = err.message || "No se pudo generar el archivo.";
+            } finally {
+                boton.disabled = false;
+                boton.dataset.generando = "0";
+            }
+        };
+
+        btnTablas.addEventListener("click", () => generar(
+            btnTablas,
+            "/api/descargar-tablas",
+            `Generando ${p.cantidad} tablas ${p.formato.toUpperCase()}…`
+        ));
+
+        btnMazo.addEventListener("click", () => generar(
+            btnMazo,
+            "/api/descargar-mazo",
+            "Generando el mazo de 54 cartas…"
+        ));
 
     } catch (e) {
         titulo.textContent = "No pudimos verificar el pago";

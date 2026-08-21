@@ -1,0 +1,85 @@
+MICELANEASSTORE · V5 BLOB + PDF REAL
+=====================================
+
+OBJETIVO
+--------
+Esta actualización parte de la versión que ya cobra y valida correctamente con Mercado Pago.
+NO cambia la lógica de cobro, firma compacta ni webhook que ya comprobamos.
+
+AGREGA
+------
+1. Generación REAL del PDF de tablas después de validar el pago.
+2. Generación del mazo de 54 cartas únicamente si fue comprado.
+3. Uso de las imágenes originales desde Vercel Blob PRIVADO.
+4. Los PDFs generados también se guardan en Blob PRIVADO.
+5. El navegador recibe una URL firmada temporal de 15 minutos.
+6. Tradicional, Animada y Gorditos se ajustan proporcionalmente (contain) sin deformarse.
+7. Las tablas se imprimen 2 por hoja Carta horizontal, aproximadamente media carta cada una.
+8. Las tablas son determinísticas por payment_id: si se vuelven a generar para la misma compra,
+   conservan la misma selección de cartas.
+
+ARCHIVOS NUEVOS / MODIFICADOS
+-----------------------------
+package.json
+pago-exitoso.html
+.gitignore
+api/descargar-tablas.js
+api/descargar-mazo.js
+api/_lib/blob-assets.js
+api/_lib/blob-download.js
+api/_lib/pdf-loteria.js
+scripts/subir-originales-blob.mjs
+scripts/privatizar-originales.mjs
+SUBIR_ORIGINALES_BLOB.bat
+PRIVATIZAR_ORIGINALES.bat
+
+PASO A PASO IMPORTANTE
+----------------------
+A) Copia esta actualización encima de tu proyecto ACTUAL.
+B) NO hagas Push todavía.
+C) Ejecuta SUBIR_ORIGINALES_BLOB.bat.
+   - instala dependencias
+   - vincula la carpeta local con Vercel
+   - trae BLOB_READ_WRITE_TOKEN a .env.local
+   - empaqueta las 54 imágenes de cada colección
+   - sube 3 archivos privados:
+       loterias/tradicional/cartas.zip
+       loterias/animada/cartas.zip
+       loterias/gorditos/cartas.zip
+D) Solo si ese proceso termina con TODO SALIO BIEN, ejecuta PRIVATIZAR_ORIGINALES.bat.
+   Esto mueve los originales fuera de /img para que no sean accesibles desde la web.
+   Las vistas previas con marca de agua en img/preview NO se tocan.
+E) Revisa GitHub Desktop:
+   - debe mostrar eliminadas img/tradicional, img/animada e img/gorditos
+   - NO debe mostrar originales-privados (está en .gitignore)
+   - sí debe mostrar package.json, APIs, scripts y pago-exitoso.html
+F) Commit + Push origin.
+G) Espera el deployment Ready en Vercel.
+H) Haz UNA compra de prueba y prueba:
+   - Guía y patrones
+   - Generar PDF de tablas
+   - Mazo solo si la compra lo incluye
+
+SEGURIDAD
+---------
+- BLOB_READ_WRITE_TOKEN se queda únicamente en Vercel/.env.local y nunca en el navegador.
+- .env.local está ignorado por Git.
+- Los originales limpios se sacan de la ruta pública /img.
+- Los ZIP de originales viven en Blob privado.
+- Los PDFs de clientes viven en Blob privado.
+- La URL de descarga expira a los 15 minutos.
+- El endpoint verifica el token de descarga firmado antes de generar archivos.
+
+NOTA SOBRE GITHUB
+-----------------
+Si tu repositorio de GitHub es público, los archivos que estuvieron en commits anteriores pueden
+seguir existiendo en el historial de Git aunque los eliminemos del estado actual. Para máxima
+protección, conviene que el repositorio sea PRIVADO. Esto no impide el despliegue en Vercel.
+
+DEPENDENCIAS
+------------
+@vercel/blob ^2.6.1
+pdf-lib      ^1.17.1
+fflate       ^0.8.2
+
+Si npm install genera package-lock.json, inclúyelo en el commit.

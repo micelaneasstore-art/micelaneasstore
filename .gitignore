@@ -10,3 +10,9 @@ node_modules/
 # Archivos del sistema
 .DS_Store
 Thumbs.db
+
+# Originales limpios: se conservan solo localmente y en Blob privado
+originales-privados/
+.env.local
+
+.vercel/
