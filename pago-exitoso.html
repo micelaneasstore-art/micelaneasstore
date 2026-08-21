@@ -141,7 +141,13 @@
                 if (!rr.ok || !dd.url) throw new Error(dd.error || "No se pudo generar el archivo.");
                 etiqueta.textContent = "Descargar";
                 mensajeGenerador.textContent = "Archivo listo. El enlace de descarga es temporal por seguridad.";
-                window.location.href = dd.url;
+                const enlace = document.createElement("a");
+                enlace.href = dd.url;
+                enlace.download = "";
+                enlace.style.display = "none";
+                document.body.appendChild(enlace);
+                enlace.click();
+                enlace.remove();
             } catch (err) {
                 etiqueta.textContent = anterior;
                 mensajeGenerador.textContent = err.message || "No se pudo generar el archivo.";
