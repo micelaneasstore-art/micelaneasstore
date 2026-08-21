@@ -1148,7 +1148,13 @@ if (btnPagar) {
                         diseñoSeleccionado ||
                         sessionStorage.getItem("micelaneasstore_diseno") ||
                         "tradicional",
-                    agregarMazo: Boolean(agregarMazo?.checked)
+                    agregarMazo: Boolean(agregarMazo?.checked),
+                    distribucion: Object.fromEntries(
+                        [...distributionCards].map(card => [
+                            card.dataset.position,
+                            leerCantidadTarjeta(card)
+                        ])
+                    )
                 })
             });
 

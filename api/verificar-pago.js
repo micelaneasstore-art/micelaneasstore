@@ -63,6 +63,7 @@ module.exports = async function handler(req, res) {
                     formato: pedido.formato,
                     diseno: pedido.diseno,
                     agregarMazo: pedido.agregarMazo,
+                    distribucion: pedido.distribucion,
                     subtotal: pedido.subtotal,
                     mazo: pedido.mazo,
                     total: pedido.total

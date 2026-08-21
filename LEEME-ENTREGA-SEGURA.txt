@@ -1,0 +1,66 @@
+MICELANEASSTORE - ENTREGA SEGURA V1
+
+ESTA VERSIÓN YA HACE:
+---------------------
+1. La distribución exacta de tablas forma parte del pedido firmado.
+   Ya no se paga solamente "10 tablas": también quedan firmados los tipos
+   (sin dobles, seguidas, diagonales, esquinas) y sus cantidades.
+
+2. Después del pago, /api/crear-token-descarga:
+   - consulta el payment_id directamente en Mercado Pago;
+   - valida status=approved;
+   - valida MXN;
+   - valida el importe;
+   - valida la referencia HMAC;
+   - emite un token de descarga de 15 minutos.
+
+3. pago-exitoso.html ya muestra el Paso 5 "Tus archivos".
+
+4. La guía PDF puede descargarse mediante:
+   /api/descargar-guia?token=...
+
+5. Las descargas no se habilitan por manipular la URL.
+
+IMPORTANTE - POR QUÉ TABLAS Y MAZO TODAVÍA DICEN "PREPARANDO"
+-------------------------------------------------------------
+El ZIP del proyecto que recibí NO contiene las carpetas de imágenes originales
+limpias (img/tradicional, img/animada, img/gorditos).
+
+Eso en realidad es bueno para seguridad: los originales no deberían estar
+públicamente en Vercel.
+
+Para generar el PDF comprado necesitamos el siguiente paso:
+- subir las imágenes originales limpias a almacenamiento PRIVADO;
+- el backend las lee desde ahí después de validar el pago;
+- generar el PDF;
+- entregar el archivo con el token temporal.
+
+NO recomiendo volver a poner los originales limpios dentro de /img del sitio.
+
+ARCHIVOS NUEVOS
+---------------
+api/_lib/delivery.js
+api/crear-token-descarga.js
+api/descargar-guia.js
+api/descargar-tablas.js
+api/descargar-mazo.js
+
+ARCHIVOS MODIFICADOS
+--------------------
+api/_lib/order.js
+api/verificar-pago.js
+js/app.js
+pago-exitoso.html
+css/payment-result.css
+
+PRUEBA RECOMENDADA
+------------------
+Como ahora la distribución forma parte de la firma, haz una NUEVA compra de prueba
+después de desplegar esta versión. Los pagos de prueba anteriores fueron creados
+con la referencia antigua y no incluyen distribución.
+
+SIGUIENTE PASO
+--------------
+Conectar almacenamiento privado de originales y generar:
+- PDF de tablas
+- PDF de mazo opcional

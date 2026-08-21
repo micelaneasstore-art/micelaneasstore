@@ -18,8 +18,49 @@
 
     <div id="resumenPago" class="result-summary" hidden></div>
 
+    <section id="descargas" class="download-section" hidden>
+      <h2>Tus archivos</h2>
+      <p class="download-help">
+        Los enlaces se habilitan únicamente después de validar el pago.
+      </p>
+
+      <div class="download-grid">
+        <a id="btnGuia" class="download-card" href="#">
+          <span class="download-icon">📘</span>
+          <span>
+            <strong>Guía y patrones</strong>
+            <small>Instrucciones 4×4 y 5×5</small>
+          </span>
+          <b>Descargar</b>
+        </a>
+
+        <button id="btnTablas" class="download-card download-pending" type="button" disabled>
+          <span class="download-icon">📄</span>
+          <span>
+            <strong>Tablas de lotería</strong>
+            <small>PDF comprado</small>
+          </span>
+          <b>Preparando</b>
+        </button>
+
+        <button id="btnMazo" class="download-card download-pending" type="button" disabled hidden>
+          <span class="download-icon">🃏</span>
+          <span>
+            <strong>Mazo de 54 cartas</strong>
+            <small>PDF imprimible</small>
+          </span>
+          <b>Preparando</b>
+        </button>
+      </div>
+
+      <p class="download-notice" id="mensajeGenerador">
+        La autorización de descarga ya quedó protegida. Falta conectar las imágenes
+        originales limpias al generador de PDF.
+      </p>
+    </section>
+
     <div class="result-actions">
-      <a class="result-btn" href="crear.html">Volver al creador</a>
+      <a class="result-btn" href="crear.html">Crear otra lotería</a>
     </div>
   </main>
 </div>
@@ -32,6 +73,9 @@
     const titulo = document.getElementById("tituloEstado");
     const texto = document.getElementById("textoEstado");
     const resumen = document.getElementById("resumenPago");
+    const descargas = document.getElementById("descargas");
+    const btnGuia = document.getElementById("btnGuia");
+    const btnMazo = document.getElementById("btnMazo");
 
     if (!paymentId) {
         titulo.textContent = "No pudimos identificar el pago";
@@ -41,29 +85,26 @@
     }
 
     try {
-        const r = await fetch(`/api/verificar-pago?payment_id=${encodeURIComponent(paymentId)}`);
+        const r = await fetch(
+            `/api/crear-token-descarga?payment_id=${encodeURIComponent(paymentId)}`
+        );
         const data = await r.json();
 
-        if (!r.ok || !data.valido) {
-            titulo.textContent =
-                data.status === "pending"
-                    ? "Tu pago está pendiente"
-                    : "El pago todavía no está confirmado";
-
-            titulo.className =
-                data.status === "pending" ? "status-warn" : "status-error";
-
+        if (!r.ok || !data.token) {
+            titulo.textContent = "El pago todavía no permite descargar";
+            titulo.className = "status-error";
             texto.textContent =
-                "No habilitaremos ninguna descarga hasta confirmar el pago con Mercado Pago.";
+                data.error ||
+                "No habilitaremos ninguna descarga hasta confirmar el pago.";
             return;
         }
+
+        const p = data.pedido;
 
         titulo.textContent = "¡Pago confirmado!";
         titulo.className = "status-ok";
         texto.textContent =
-            "Tu compra fue validada correctamente. El siguiente paso será generar aquí tus archivos de descarga.";
-
-        const p = data.pedido;
+            "Tu compra fue validada correctamente y ya tiene autorización de descarga.";
 
         resumen.hidden = false;
         resumen.innerHTML = `
@@ -71,8 +112,17 @@
             <div class="result-row"><span>Formato</span><strong>${p.formato.toUpperCase()}</strong></div>
             <div class="result-row"><span>Mazo</span><strong>${p.agregarMazo ? "Sí" : "No"}</strong></div>
             <div class="result-row"><span>Total pagado</span><strong>$${p.total} MXN</strong></div>
-            <div class="result-row"><span>Pago</span><strong>#${data.payment_id}</strong></div>
+            <div class="result-row"><span>Pago</span><strong>#${paymentId}</strong></div>
         `;
+
+        descargas.hidden = false;
+
+        btnGuia.href =
+            `/api/descargar-guia?token=${encodeURIComponent(data.token)}`;
+
+        if (p.agregarMazo) {
+            btnMazo.hidden = false;
+        }
 
     } catch (e) {
         titulo.textContent = "No pudimos verificar el pago";
