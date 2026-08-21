@@ -1,0 +1,875 @@
+<!DOCTYPE html>
+<html lang="es-MX">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Crear Lotería | MicelaneasStore</title>
+
+    <meta
+        name="description"
+        content="Crea y configura tus propias tablas de lotería desde MicelaneasStore."
+    >
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+
+    <link
+        href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap"
+        rel="stylesheet"
+    >
+
+    <link rel="stylesheet" href="css/estilos.css">
+    <link rel="stylesheet" href="css/pago.css">
+</head>
+
+<body>
+
+<header class="header">
+
+    <div class="header-content">
+
+        <a href="index.html" class="header-logo">
+            MicelaneasStore
+        </a>
+
+        <nav class="header-menu">
+
+            <a href="index.html">Inicio</a>
+            <a href="#">Comprar</a>
+            <a href="crear.html" class="active">Crear</a>
+            <a href="#">Colecciones</a>
+            <a href="#">Recursos</a>
+
+        </nav>
+
+        <div class="header-actions">
+
+            <button class="btn-login">
+                Mi Cuenta
+            </button>
+
+        </div>
+
+    </div>
+
+</header>
+
+<main>
+
+    <section class="creator-page">
+
+        <div class="container">
+
+            <div class="creator-heading">
+
+                <span class="hero-badge">
+                    Centro de Creación
+                </span>
+
+                <h1>
+                    Crea tu propia lotería
+                </h1>
+
+                <p>
+                    Elige un diseño, configura tus tablas, revisa la vista previa
+                    y obtén tu archivo listo para imprimir.
+                </p>
+
+            </div>
+
+
+            <!-- PROGRESO -->
+
+            <div class="creator-steps">
+
+                <div class="creator-step active">
+
+                    <span class="step-number">1</span>
+
+                    <span class="step-label">
+                        Diseño
+                    </span>
+
+                </div>
+
+                <div class="creator-step">
+
+                    <span class="step-number">2</span>
+
+                    <span class="step-label">
+                        Configuración
+                    </span>
+
+                </div>
+
+                <div class="creator-step">
+
+                    <span class="step-number">3</span>
+
+                    <span class="step-label">
+                        Vista previa
+                    </span>
+
+                </div>
+
+                <div class="creator-step">
+
+                    <span class="step-number">4</span>
+
+                    <span class="step-label">
+                        Pago
+                    </span>
+
+                </div>
+
+                <div class="creator-step">
+
+                    <span class="step-number">5</span>
+
+                    <span class="step-label">
+                        Descarga
+                    </span>
+
+                </div>
+
+            </div>
+
+
+            <!-- PASO 1 -->
+
+            <section class="creator-panel" id="paso1">
+
+                <div class="creator-panel-header">
+
+                    <div>
+
+                        <span class="creator-step-title">
+                            Paso 1 de 5
+                        </span>
+
+                        <h2>
+                            Elige cómo quieres crear tu lotería
+                        </h2>
+
+                        <p>
+                            Selecciona uno de nuestros diseños o crea una lotería con tus propias imágenes.
+                        </p>
+
+                    </div>
+
+                </div>
+
+
+                <div class="design-grid">
+
+                    <article class="design-card" data-design="tradicional">
+
+                        <!-- TRADICIONAL -->
+                        <div class="design-image">
+                        <img
+                            src="img/colecciones/tradicional.webp"
+                            alt="Lotería Tradicional"
+                        >
+                        </div>
+
+                        <div class="design-card-content">
+
+                            <h3>
+                                Lotería Tradicional
+                            </h3>
+
+                            <p>
+                                El clásico diseño de la Lotería Mexicana.
+                            </p>
+
+                            <button type="button" class="btn-primary select-design">
+                                Elegir diseño
+                            </button>
+
+                        </div>
+
+                    </article>
+
+
+                    <article class="design-card" data-design="animada">
+
+                        <!-- ANIMADA -->
+                        <div class="design-image">
+                            <img
+                                src="img/colecciones/animadas.webp"
+                                alt="Lotería Animada"
+                            >
+                        </div>
+
+                        <div class="design-card-content">
+
+                            <h3>
+                                Lotería Animada
+                            </h3>
+
+                            <p>
+                                Una versión colorida y moderna para tus partidas.
+                            </p>
+
+                            <button type="button" class="btn-primary select-design">
+                                Elegir diseño
+                            </button>
+
+                        </div>
+
+                    </article>
+
+
+                    <article class="design-card" data-design="gorditos">
+
+                        <!-- GORDITOS -->
+                        <div class="design-image">
+                            <img
+                                src="img/colecciones/gorditos.webp"
+                                alt="Lotería Gorditos"
+                            >
+                        </div>
+
+                        <div class="design-card-content">
+
+                            <h3>
+                                Gorditos
+                            </h3>
+
+                            <p>
+                                Una colección divertida y llena de personalidad.
+                            </p>
+
+                            <button type="button" class="btn-primary select-design">
+                                Elegir diseño
+                            </button>
+
+                        </div>
+
+                    </article>
+
+
+                    <article class="design-card">
+
+                        <!-- MÁS DISEÑOS -->
+                        <div class="design-image">
+                            <img
+                                src="img/colecciones/masdisenos.webp"
+                                alt="Más diseños de lotería"
+                            >
+                        </div>
+
+                        <div class="design-card-content">
+
+                            <h3>
+                                Más diseños
+                            </h3>
+
+                            <p>
+                                Explora todas nuestras colecciones y encuentra el estilo ideal para tu lotería.
+                            </p>
+
+                            <button class="btn-primary">
+                                Ver colecciones
+                            </button>
+
+                        </div>
+
+                    </article>
+
+                    <article class="design-card custom-design-card">
+
+                        <div class="design-image custom-design-image">
+                            <span class="custom-design-icon">＋</span>
+                        </div>
+
+                        <div class="custom-design-content">
+                            <span class="custom-design-label">
+                                PERSONALIZADA
+                            </span>
+
+                            <h3>
+                                Crea tu propia lotería
+                            </h3>
+
+                            <p>
+                                Usa tus propias imágenes para crear una lotería totalmente personalizada.
+                            </p>
+                        </div>
+
+                        <div class="custom-design-action">
+                            <button class="btn-primary">
+                                Crear desde cero
+                            </button>
+                        </div>
+
+                    </article>
+                </div>
+
+                <div class="creator-actions">
+
+                    <button
+                        id="btnContinuar"
+                        class="btn-primary creator-next"
+                        disabled>
+                        Continuar a configuración
+                    </button>
+
+                </div>
+
+            </section>
+ <!-- ==================================================
+                 PASO 2 - CONFIGURACIÓN
+            =================================================== -->
+
+            <section class="creator-panel creator-panel-hidden" id="paso2">
+
+                <div class="creator-panel-header">
+
+                    <span class="creator-step-title">
+                        Paso 2 de 5
+                    </span>
+
+                    <h2>
+                        Configura tus tablas
+                    </h2>
+
+                    <p>
+                        Elige la cantidad, formato y modalidad que deseas utilizar.
+                    </p>
+
+                </div>
+
+                <div class="configuration-layout">
+
+                    <div class="configuration-options">
+
+                        <!-- CANTIDAD -->
+
+                        <div class="config-section">
+
+                            <h3>Cantidad de tablas</h3>
+
+                            <p class="config-help">
+                                Indica cuántas tablas deseas generar.
+                            </p>
+<!-- MODO DE DISTRIBUCIÓN -->
+
+<div class="distribution-mode">
+
+    <button
+        type="button"
+        class="distribution-mode-option active"
+        data-distribution-mode="manual"
+    >
+        <strong>Personalizada</strong>
+        <span>
+            Tú decides cuántas tablas quieres de cada presentación.
+        </span>
+    </button>
+
+    <button
+        type="button"
+        class="distribution-mode-option"
+        data-distribution-mode="automatic"
+    >
+        <strong>Automática</strong>
+        <span>
+            Elige las presentaciones y distribuimos las tablas por ti.
+        </span>
+    </button>
+
+</div>
+
+
+<div class="quantity-control">
+
+                                <button type="button" id="btnMenos">
+                                    −
+                                </button>
+
+                                <input
+                                    type="number"
+                                    id="cantidadTablas"
+                                    value="30"
+                                    min="1"
+                                    max="1000"
+                                >
+
+                                <button type="button" id="btnMas">
+                                    +
+                                </button>
+
+                            </div>
+
+                        </div>
+
+
+                        <!-- FORMATO -->
+
+                        <div class="config-section">
+
+                            <h3>Formato de tabla</h3>
+
+                            <div class="config-options-grid">
+
+                                <button
+                                    type="button"
+                                    class="config-option active"
+                                    data-format="4x4"
+                                >
+                                    <strong>4×4</strong>
+                                    <span>16 figuras</span>
+                                </button>
+
+                                <button
+                                    type="button"
+                                    class="config-option"
+                                    data-format="5x5"
+                                >
+                                    <strong>5×5</strong>
+                                    <span>25 figuras</span>
+                                </button>
+
+                            </div>
+
+                        </div>
+
+
+                        <!-- DISTRIBUCIÓN DE TABLAS -->
+
+                        <div class="config-section" id="distribucionTablas">
+
+                            <h3>Distribuye tus tablas</h3>
+
+                            <p class="config-help">
+                                Indica cuántas tablas quieres de cada presentación. La suma debe coincidir con la cantidad total.
+                            </p>
+
+                            <div class="distribution-status" id="estadoDistribucion">
+                                <span>Asignadas: <strong id="tablasAsignadas">0</strong> de <strong id="tablasTotales">30</strong></span>
+                                <span id="textoRestantes">Restantes: <strong id="tablasRestantes">30</strong></span>
+                            </div>
+
+                            <div class="automatic-distribution hidden" id="automaticDistribution">
+                                <div class="automatic-selection-header">
+                                    <div>
+                                        <h3>Selecciona las presentaciones</h3>
+                                        <p class="config-help">
+                                            Elige una, varias o todas. Las tablas se repartirán automáticamente
+                                            entre las presentaciones seleccionadas.
+                                        </p>
+                                    </div>
+
+                                    <div class="automatic-selection-actions">
+                                        <span id="contadorPresentaciones">0 de 7 seleccionadas</span>
+                                        <button type="button" class="btn-select-all" id="btnSeleccionarTodas">
+                                            Seleccionar todas
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="distribution-grid">
+
+                                <!-- SIN DOBLES -->
+                                <article class="distribution-card" data-position="sin-dobles" data-cells="">
+                                    <span class="double-position-title">Sin dobles</span>
+
+                                    <span class="mini-grid mini-grid-4x4">
+                                        <span></span><span></span><span></span><span></span>
+                                        <span></span><span></span><span></span><span></span>
+                                        <span></span><span></span><span></span><span></span>
+                                        <span></span><span></span><span></span><span></span>
+                                    </span>
+
+                                    <div class="distribution-counter">
+                                        <button type="button" class="distribution-minus" aria-label="Restar tabla">−</button>
+                                        <input type="number" class="distribution-qty" value="0" min="0" inputmode="numeric">
+                                        <button type="button" class="distribution-plus" aria-label="Agregar tabla">+</button>
+                                    </div>
+                                </article>
+
+                                <!-- SEGUIDAS ARRIBA -->
+                                <article class="distribution-card" data-position="seguidas-arriba" data-cells="6,7">
+                                    <span class="double-position-title">Centro vertical ↑</span>
+
+                                    <span class="mini-grid mini-grid-4x4">
+                                        <span></span><span></span><span></span><span></span>
+                                        <span></span><span class="active"></span><span class="active"></span><span></span>
+                                        <span></span><span></span><span></span><span></span>
+                                        <span></span><span></span><span></span><span></span>
+                                    </span>
+
+                                    <div class="distribution-counter">
+                                        <button type="button" class="distribution-minus" aria-label="Restar tabla">−</button>
+                                        <input type="number" class="distribution-qty" value="0" min="0" inputmode="numeric">
+                                        <button type="button" class="distribution-plus" aria-label="Agregar tabla">+</button>
+                                    </div>
+                                </article>
+
+                                <!-- SEGUIDAS ABAJO -->
+                                <article class="distribution-card" data-position="seguidas-abajo" data-cells="10,11">
+                                    <span class="double-position-title">Centro vertical ↓</span>
+
+                                    <span class="mini-grid mini-grid-4x4">
+                                        <span></span><span></span><span></span><span></span>
+                                        <span></span><span></span><span></span><span></span>
+                                        <span></span><span class="active"></span><span class="active"></span><span></span>
+                                        <span></span><span></span><span></span><span></span>
+                                    </span>
+
+                                    <div class="distribution-counter">
+                                        <button type="button" class="distribution-minus" aria-label="Restar tabla">−</button>
+                                        <input type="number" class="distribution-qty" value="0" min="0" inputmode="numeric">
+                                        <button type="button" class="distribution-plus" aria-label="Agregar tabla">+</button>
+                                    </div>
+                                </article>
+
+                                <!-- DIAGONAL 6-11 -->
+                                <article class="distribution-card" data-position="diagonal-derecha" data-cells="6,11">
+                                    <span class="double-position-title">Diagonal ↘</span>
+
+                                    <span class="mini-grid mini-grid-4x4">
+                                        <span></span><span></span><span></span><span></span>
+                                        <span></span><span class="active"></span><span></span><span></span>
+                                        <span></span><span></span><span class="active"></span><span></span>
+                                        <span></span><span></span><span></span><span></span>
+                                    </span>
+
+                                    <div class="distribution-counter">
+                                        <button type="button" class="distribution-minus" aria-label="Restar tabla">−</button>
+                                        <input type="number" class="distribution-qty" value="0" min="0" inputmode="numeric">
+                                        <button type="button" class="distribution-plus" aria-label="Agregar tabla">+</button>
+                                    </div>
+                                </article>
+
+                                <!-- DIAGONAL 7-10 -->
+                                <article class="distribution-card" data-position="diagonal-izquierda" data-cells="7,10">
+                                    <span class="double-position-title">Diagonal ↙</span>
+
+                                    <span class="mini-grid mini-grid-4x4">
+                                        <span></span><span></span><span></span><span></span>
+                                        <span></span><span></span><span class="active"></span><span></span>
+                                        <span></span><span class="active"></span><span></span><span></span>
+                                        <span></span><span></span><span></span><span></span>
+                                    </span>
+
+                                    <div class="distribution-counter">
+                                        <button type="button" class="distribution-minus" aria-label="Restar tabla">−</button>
+                                        <input type="number" class="distribution-qty" value="0" min="0" inputmode="numeric">
+                                        <button type="button" class="distribution-plus" aria-label="Agregar tabla">+</button>
+                                    </div>
+                                </article>
+
+                                <!-- ESQUINAS 1-16 -->
+                                <article class="distribution-card" data-position="esquinas-derecha" data-cells="1,16">
+                                    <span class="double-position-title">Esquinas ↘</span>
+
+                                    <span class="mini-grid mini-grid-4x4">
+                                        <span class="active"></span><span></span><span></span><span></span>
+                                        <span></span><span></span><span></span><span></span>
+                                        <span></span><span></span><span></span><span></span>
+                                        <span></span><span></span><span></span><span class="active"></span>
+                                    </span>
+
+                                    <div class="distribution-counter">
+                                        <button type="button" class="distribution-minus" aria-label="Restar tabla">−</button>
+                                        <input type="number" class="distribution-qty" value="0" min="0" inputmode="numeric">
+                                        <button type="button" class="distribution-plus" aria-label="Agregar tabla">+</button>
+                                    </div>
+                                </article>
+
+                                <!-- ESQUINAS 4-13 -->
+                                <article class="distribution-card" data-position="esquinas-izquierda" data-cells="4,13">
+                                    <span class="double-position-title">Esquinas ↙</span>
+
+                                    <span class="mini-grid mini-grid-4x4">
+                                        <span></span><span></span><span></span><span class="active"></span>
+                                        <span></span><span></span><span></span><span></span>
+                                        <span></span><span></span><span></span><span></span>
+                                        <span class="active"></span><span></span><span></span><span></span>
+                                    </span>
+
+                                    <div class="distribution-counter">
+                                        <button type="button" class="distribution-minus" aria-label="Restar tabla">−</button>
+                                        <input type="number" class="distribution-qty" value="0" min="0" inputmode="numeric">
+                                        <button type="button" class="distribution-plus" aria-label="Agregar tabla">+</button>
+                                    </div>
+                                </article>
+
+                            </div>
+
+                            <div class="distribution-actions">
+                                <button type="button" class="btn-secondary" id="btnTodoSinDobles">
+                                    Todo sin dobles
+                                </button>
+
+                                <button type="button" class="btn-secondary" id="btnLimpiarDistribucion">
+                                    Limpiar distribución
+                                </button>
+                            </div>
+
+                            <p class="distribution-message" id="mensajeDistribucion" aria-live="polite">
+                                Asigna las 30 tablas para continuar.
+                            </p>
+
+                        </div>
+
+                    </div>
+
+
+                    <!-- VISTA PREVIA -->
+
+                    <aside class="configuration-preview">
+
+                        <h3>Vista previa</h3>
+
+                        <p>
+                            Así se distribuirán las figuras en tu tabla.
+                        </p>
+
+                        <div class="table-preview preview-4x4" id="tablePreview">
+
+                            <span></span>
+                            <span></span>
+                            <span></span>
+                            <span></span>
+
+                            <span></span>
+                            <span></span>
+                            <span></span>
+                            <span></span>
+
+                            <span></span>
+                            <span></span>
+                            <span></span>
+                            <span></span>
+
+                            <span></span>
+                            <span></span>
+                            <span></span>
+                            <span></span>
+
+                        </div>
+
+                        <div class="preview-summary">
+
+                            <p>
+                                Diseño:
+                                <strong id="resumenDiseno">—</strong>
+                            </p>
+
+                            <p>
+                                Formato:
+                                <strong id="resumenFormato">4×4</strong>
+                            </p>
+
+                            <p>
+                                Distribución:
+                                <strong id="resumenModalidad">Pendiente</strong>
+                            </p>
+
+                            <p>
+                                Cantidad:
+                                <strong id="resumenCantidad">30</strong>
+                            </p>
+
+                        </div>
+
+                    </aside>
+
+                </div>
+
+
+                <div class="creator-navigation">
+
+                    <button
+                        type="button"
+                        class="btn-secondary"
+                        id="btnVolverDiseno"
+                    >
+                        ← Volver a diseño
+                    </button>
+
+                    <button
+                        type="button"
+                        class="btn-primary"
+                        id="btnVistaPrevia"
+                        disabled
+                    >
+                        Continuar a vista previa →
+                    </button>
+
+                </div>
+
+            </section>
+
+            <!-- ==================================================
+                 PASO 3 - VISTA PREVIA
+            =================================================== -->
+
+            <section class="creator-panel creator-panel-hidden" id="paso3">
+
+                <div class="creator-panel-header">
+                    <span class="creator-step-title">Paso 3 de 5</span>
+                    <h2>Revisa tu lotería antes de continuar</h2>
+                    <p>Esta muestra te permite confirmar el formato y la distribución elegida antes del pago.</p>
+                </div>
+
+                <div class="final-preview-layout">
+
+                    <div class="final-preview-main">
+                        <div class="final-preview-toolbar">
+                            <div>
+                                <span class="preview-kicker">Muestra de tabla</span>
+                                <h3 id="previewTipoTabla">—</h3>
+                            </div>
+
+                            <button type="button" class="btn-secondary" id="btnOtraMuestra">
+                                ↻ Ver otra muestra
+                            </button>
+                        </div>
+
+                        <div class="generated-table preview-generated-4x4" id="generatedTablePreview"></div>
+
+                        <p class="preview-note">
+                            Vista previa con imágenes reales de la colección seleccionada. Las cartas muestran una marca de agua únicamente en esta vista previa.
+                        </p>
+                    </div>
+
+                    <aside class="final-preview-summary">
+                        <h3>Resumen de tu pedido</h3>
+
+                        <div class="final-summary-row">
+                            <span>Diseño</span>
+                            <strong id="previewResumenDiseno">—</strong>
+                        </div>
+
+                        <div class="final-summary-row">
+                            <span>Formato</span>
+                            <strong id="previewResumenFormato">—</strong>
+                        </div>
+
+                        <div class="final-summary-row">
+                            <span>Cantidad</span>
+                            <strong id="previewResumenCantidad">—</strong>
+                        </div>
+
+                        <div class="final-summary-row price-highlight-row">
+                            <span>Subtotal</span>
+                            <strong id="previewResumenPrecio">—</strong>
+                        </div>
+
+                        <div class="final-summary-row">
+                            <span>Distribución</span>
+                            <strong id="previewResumenDistribucion">—</strong>
+                        </div>
+
+                        <div class="final-preview-breakdown" id="previewDesglose"></div>
+                    </aside>
+
+                </div>
+
+                <div class="creator-navigation">
+                    <button type="button" class="btn-secondary" id="btnVolverConfiguracion">
+                        ← Volver a configuración
+                    </button>
+
+                    <button type="button" class="btn-primary" id="btnContinuarPago">
+                        Continuar a pago →
+                    </button>
+                </div>
+
+            </section>
+
+            <!-- ==================================================
+                 PASO 4 - PAGO
+            =================================================== -->
+
+            <section class="creator-panel creator-panel-hidden" id="paso4">
+
+                <div class="creator-panel-header">
+                    <span class="creator-step-title">Paso 4 de 5</span>
+                    <h2>Revisa tu pedido</h2>
+                    <p>Confirma lo que deseas recibir antes de realizar el pago.</p>
+                </div>
+
+                <div class="payment-layout">
+
+                    <div class="payment-card">
+                        <h3>Tu compra</h3>
+
+                        <div class="payment-line">
+                            <div>
+                                <strong id="pagoCantidadTitulo">Tablas de lotería</strong>
+                                <span id="pagoDetalleTablas">—</span>
+                            </div>
+                            <strong id="pagoPrecioTablas">$0</strong>
+                        </div>
+
+                        <label class="addon-card" for="agregarMazo">
+                            <input type="checkbox" id="agregarMazo">
+                            <span class="addon-check"></span>
+                            <span class="addon-info">
+                                <strong>Agregar mazo de 54 cartas</strong>
+                                <small>Incluye las 54 cartas de la colección seleccionada, listas para imprimir.</small>
+                            </span>
+                            <strong class="addon-price">+$10</strong>
+                        </label>
+
+                        <div class="included-box">
+                            <strong>Incluido sin costo adicional</strong>
+                            <span>✓ Guía de juego e impresión</span>
+                            <span>✓ Patrones de jugada 4×4 y 5×5</span>
+                        </div>
+                    </div>
+
+                    <aside class="payment-summary-card">
+                        <h3>Resumen</h3>
+
+                        <div class="payment-summary-row">
+                            <span>Tablas</span>
+                            <strong id="pagoResumenTablas">$0</strong>
+                        </div>
+
+                        <div class="payment-summary-row">
+                            <span>Mazo</span>
+                            <strong id="pagoResumenMazo">$0</strong>
+                        </div>
+
+                        <div class="payment-total-row">
+                            <span>Total</span>
+                            <strong id="pagoTotal">$0 MXN</strong>
+                        </div>
+
+                        <p class="payment-note">Producto digital. No requiere envío físico.</p>
+
+                        <button type="button" class="btn-primary payment-button" id="btnPagar">
+                            Pagar
+                        </button>
+
+                        <p class="payment-secure">🔒 Pago seguro</p>
+                    </aside>
+
+                </div>
+
+                <div class="creator-navigation">
+                    <button type="button" class="btn-secondary" id="btnVolverVistaPrevia">
+                        ← Volver a vista previa
+                    </button>
+                </div>
+
+            </section>
+
+        </div>
+
+    </section>
+
+</main>
+
+<script src="js/app.js"></script>
+
+</body>
+</html>

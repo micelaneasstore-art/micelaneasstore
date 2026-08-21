@@ -1,0 +1,1354 @@
+/*==================================================
+HEADER
+==================================================*/
+
+.header{
+
+    height:var(--header-height);
+
+    background:var(--color-white);
+
+    box-shadow:var(--shadow-small);
+
+    position:sticky;
+
+    top:0;
+
+    z-index:1000;
+
+}
+
+.header-content{
+
+    display:flex;
+
+    justify-content:space-between;
+
+    align-items:center;
+
+    height:100%;
+
+}
+
+.header-container{
+
+    width: min(100%, var(--container-width));
+
+    height: 100%;
+
+    margin: 0 auto;
+
+    padding: 0 var(--space-2);
+
+    display: flex;
+
+    justify-content: space-between;
+
+    align-items: center;
+
+}
+
+.header-menu{
+
+    display: flex;
+
+    align-items: center;
+
+    gap: 36px;
+
+}
+
+.header-menu a{
+
+    text-decoration: none;
+
+    color: var(--color-dark);
+
+    font-weight: 500;
+
+    transition: .2s;
+
+}
+
+.header-menu a:hover{
+
+    color: var(--color-primary);
+
+}
+
+.header-actions{
+
+    display:flex;
+
+    align-items:center;
+
+}
+
+.header-logo{
+
+    font-size:2.2rem;
+
+    font-weight:700;
+
+    color:var(--color-primary);
+
+}
+.container{
+
+    width:min(100%, var(--container-width));
+
+    margin:auto;
+
+    padding:0 var(--space-2);
+
+}
+/*==================================================
+HERO
+==================================================*/
+
+.hero{
+
+    padding:35px 0;
+
+}
+
+.hero-content{
+
+    display:grid;
+
+    grid-template-columns:1fr 1fr;
+
+    align-items:center;
+
+    gap:40px;
+
+}
+
+/* ==================================================
+   MODULO CREAR - ESTRUCTURA
+================================================== */
+
+.creator-hero{
+    padding:55px 0 25px;
+}
+
+.creator-intro{
+    max-width:760px;
+    margin:0 auto;
+    text-align:center;
+}
+
+.creator-intro h1{
+    font-size:3rem;
+    line-height:1.15;
+    margin:20px 0 14px;
+}
+
+.creator-intro p{
+    font-size:1.1rem;
+    line-height:1.7;
+    color:#667085;
+}
+
+
+/* ==================================================
+   OPCIONES DEL CREADOR
+================================================== */
+
+.creator-options{
+    padding:25px 0 80px;
+}
+
+.creator-grid{
+    display:grid;
+    grid-template-columns:repeat(2, 1fr);
+    gap:28px;
+    max-width:1050px;
+    margin:0 auto;
+}
+
+.creator-card{
+    background:#ffffff;
+    border-radius:24px;
+    padding:36px;
+    box-shadow:0 12px 35px rgba(0,0,0,.07);
+
+    display:flex;
+    flex-direction:column;
+    align-items:flex-start;
+}
+
+.creator-card h2{
+    font-size:1.55rem;
+    margin:18px 0 10px;
+}
+
+.creator-card p{
+    color:#667085;
+    line-height:1.65;
+    margin-bottom:25px;
+    flex-grow:1;
+}
+
+.creator-card-number{
+    width:72px;
+    height:72px;
+
+    display:flex;
+    align-items:center;
+    justify-content:center;
+
+    border-radius:18px;
+
+    background:#FFE8E8;
+    color:var(--color-primary);
+
+    font-size:1.4rem;
+    font-weight:700;
+}
+
+.creator-card-icon{
+    width:72px;
+    height:72px;
+
+    display:flex;
+    align-items:center;
+    justify-content:center;
+
+    border-radius:18px;
+
+    background:#FFE8E8;
+
+    font-size:2rem;
+}
+
+
+/* ==================================================
+   RESPONSIVE
+================================================== */
+
+@media (max-width:768px){
+
+    .creator-grid{
+        grid-template-columns:1fr;
+    }
+
+    .creator-intro h1{
+        font-size:2.2rem;
+    }
+
+}
+/* ==================================================
+   CREAR.HTML - ESTRUCTURA GENERAL
+================================================== */
+
+.creator-page{
+    padding:45px 0 80px;
+}
+
+.creator-heading{
+    max-width:850px;
+    margin:0 auto 35px;
+    text-align:center;
+}
+
+.creator-heading h1{
+    font-size:2.8rem;
+    line-height:1.15;
+    margin:18px 0 12px;
+}
+
+.creator-heading p{
+    color:var(--color-text-light);
+    font-size:1.05rem;
+}
+
+
+/* ==================================================
+   PASOS DEL CREADOR
+================================================== */
+
+.creator-steps{
+    max-width:1050px;
+    margin:0 auto 35px;
+
+    display:grid;
+    grid-template-columns:repeat(5, 1fr);
+
+    background:var(--color-white);
+    border-radius:18px;
+    box-shadow:var(--shadow-small);
+
+    overflow:hidden;
+}
+
+.creator-step{
+    position:relative;
+
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    gap:10px;
+
+    padding:18px 12px;
+
+    color:var(--color-text-light);
+
+    font-size:.9rem;
+    font-weight:500;
+}
+
+.creator-step:not(:last-child)::after{
+    content:"";
+    position:absolute;
+    right:0;
+    top:25%;
+    width:1px;
+    height:50%;
+    background:var(--color-border);
+}
+
+.creator-step.active{
+    color:var(--color-primary);
+    background:#fff4f4;
+}
+
+.step-number{
+    width:30px;
+    height:30px;
+
+    display:flex;
+    align-items:center;
+    justify-content:center;
+
+    border-radius:50%;
+
+    background:#eeeeee;
+
+    font-size:.85rem;
+    font-weight:700;
+}
+
+.creator-step.active .step-number{
+    background:var(--color-primary);
+    color:white;
+}
+
+
+/* ==================================================
+   PANEL PRINCIPAL
+================================================== */
+
+.creator-panel{
+    max-width:1150px;
+    margin:0 auto;
+
+    background:var(--color-white);
+    border-radius:24px;
+
+    padding:35px;
+
+    box-shadow:var(--shadow-medium);
+}
+
+.creator-panel-header{
+    margin-bottom:30px;
+}
+
+.creator-step-title{
+    display:block;
+
+    color:var(--color-primary);
+
+    font-size:.9rem;
+    font-weight:600;
+
+    margin-bottom:6px;
+}
+
+.creator-panel-header h2{
+    font-size:1.8rem;
+    margin-bottom:8px;
+}
+
+.creator-panel-header p{
+    color:var(--color-text-light);
+}
+
+
+/* ==================================================
+   GRID DE DISEÑOS
+================================================== */
+
+.design-grid{
+    display:grid;
+    grid-template-columns:repeat(4, 1fr);
+    gap:22px;
+}
+
+.design-card{
+    background:#ffffff;
+
+    border:1px solid var(--color-border);
+    border-radius:18px;
+
+    overflow:hidden;
+
+    display:flex;
+    flex-direction:column;
+
+    transition:var(--transition);
+}
+
+.design-card:hover{
+    transform:translateY(-4px);
+    box-shadow:var(--shadow-medium);
+}
+
+.design-image{
+    width:100%;
+    height:190px;
+}
+
+.design-image img{
+    width:100%;
+    height:100%;
+    object-fit:cover;
+    display:block;
+}
+.placeholder-design{
+    display:flex;
+    align-items:center;
+    justify-content:center;
+
+    background:#f3f4f6;
+
+    color:#9ca3af;
+
+    font-weight:500;
+}
+
+.design-card-content{
+    padding:20px;
+
+    display:flex;
+    flex-direction:column;
+
+    flex-grow:1;
+}
+
+.design-card-content h3{
+    font-size:1.15rem;
+    margin-bottom:8px;
+}
+
+.design-card-content p{
+    color:var(--color-text-light);
+
+    font-size:.9rem;
+    line-height:1.5;
+
+    margin-bottom:18px;
+
+    flex-grow:1;
+}
+
+.design-card-content .btn-primary{
+    width:100%;
+    text-align:center;
+    border:none;
+    cursor:pointer;
+}
+
+
+/* ==================================================
+   ACCIONES
+================================================== */
+
+.creator-actions{
+    display:flex;
+    justify-content:flex-end;
+
+    margin-top:30px;
+    padding-top:25px;
+
+    border-top:1px solid var(--color-border);
+}
+
+.creator-next:disabled{
+    opacity:.45;
+    cursor:not-allowed;
+}
+
+
+/* ==================================================
+   RESPONSIVE CREAR
+================================================== */
+
+@media (max-width:1000px){
+
+    .design-grid{
+        grid-template-columns:repeat(2, 1fr);
+    }
+
+    .step-label{
+        display:none;
+    }
+
+}
+
+@media (max-width:600px){
+
+    .creator-page{
+        padding:30px 0 60px;
+    }
+
+    .creator-heading h1{
+        font-size:2.1rem;
+    }
+
+    .creator-panel{
+        padding:22px;
+    }
+
+    .design-grid{
+        grid-template-columns:1fr;
+    }
+
+}
+/* ==================================================
+   LOTERIA PERSONALIZADA
+================================================== */
+
+.custom-design-card{
+    grid-column:1 / -1;
+
+    border:2px dashed var(--color-primary);
+    background:#fffafa;
+
+    display:grid;
+    grid-template-columns:180px 1fr 220px;
+    align-items:center;
+
+    min-height:170px;
+}
+
+.custom-design-image{
+    width:100%;
+    height:100%;
+
+    display:flex;
+    align-items:center;
+    justify-content:center;
+
+    background:#fff1f1;
+}
+
+.custom-design-card .design-card-content{
+    display:block;
+    padding:28px 32px;
+}
+
+.custom-design-card .design-card-content p{
+    margin-bottom:0;
+    max-width:580px;
+}
+
+.custom-design-card .btn-primary{
+    width:auto;
+    min-width:180px;
+    margin-right:28px;
+}
+
+.custom-design-card .design-card-content{
+    grid-column:2;
+}
+
+.custom-design-card > .btn-primary{
+    grid-column:3;
+}
+
+.custom-design-icon{
+    width:72px;
+    height:72px;
+
+    display:flex;
+    align-items:center;
+    justify-content:center;
+
+    border-radius:50%;
+
+    background:var(--color-primary);
+    color:#ffffff;
+
+    font-size:2.5rem;
+    font-weight:300;
+}
+
+.custom-design-label{
+    display:inline-block;
+    align-self:flex-start;
+
+    margin-bottom:8px;
+    padding:4px 9px;
+
+    border-radius:20px;
+
+    background:#FFE8E8;
+    color:var(--color-primary);
+
+    font-size:.7rem;
+    font-weight:700;
+    letter-spacing:.5px;
+}
+/* ==================================================
+   DISEÑO SELECCIONADO
+================================================== */
+
+.design-card.selected{
+    border:2px solid var(--color-primary);
+    box-shadow:0 10px 30px rgba(198,40,40,.15);
+    transform:translateY(-4px);
+}
+
+.design-card.selected .select-design{
+    background:var(--color-primary-dark);
+}
+
+.design-card.selected .select-design::before{
+    content:"✓ ";
+}
+/* ==================================================
+   PASO 2 - CONFIGURACIÓN
+================================================== */
+
+.creator-panel-hidden{
+    display:none;
+}
+
+.configuration-layout{
+    display:grid;
+    grid-template-columns:1.4fr .8fr;
+    gap:40px;
+}
+
+.config-section{
+    padding:25px 0;
+    border-bottom:1px solid var(--color-border);
+}
+
+.config-section:first-child{
+    padding-top:0;
+}
+
+.config-section h3{
+    margin-bottom:5px;
+    font-size:1.15rem;
+}
+
+.config-help{
+    color:var(--color-text-light);
+    font-size:.9rem;
+    margin-bottom:18px;
+}
+
+
+/* CANTIDAD */
+
+.quantity-control{
+    display:flex;
+    width:230px;
+    height:52px;
+}
+
+.quantity-control button{
+    width:55px;
+
+    border:none;
+
+    background:var(--color-primary);
+    color:white;
+
+    font-size:1.5rem;
+    cursor:pointer;
+}
+
+.quantity-control button:first-child{
+    border-radius:12px 0 0 12px;
+}
+
+.quantity-control button:last-child{
+    border-radius:0 12px 12px 0;
+}
+
+.quantity-control input{
+    width:120px;
+
+    border:1px solid var(--color-border);
+    border-left:none;
+    border-right:none;
+
+    text-align:center;
+
+    font-family:inherit;
+    font-size:1.15rem;
+    font-weight:600;
+}
+
+
+/* OPCIONES */
+
+.config-options-grid{
+    display:grid;
+    grid-template-columns:repeat(2, 1fr);
+    gap:15px;
+
+    max-width:520px;
+}
+
+.config-option{
+    min-height:85px;
+
+    padding:15px;
+
+    border:2px solid var(--color-border);
+    border-radius:14px;
+
+    background:white;
+
+    cursor:pointer;
+
+    display:flex;
+    flex-direction:column;
+    align-items:flex-start;
+    justify-content:center;
+
+    font-family:inherit;
+
+    transition:var(--transition);
+}
+
+.config-option strong{
+    font-size:1.05rem;
+}
+
+.config-option span{
+    color:var(--color-text-light);
+    font-size:.82rem;
+}
+
+.config-option.active{
+    border-color:var(--color-primary);
+    background:#fff4f4;
+    color:var(--color-primary);
+}
+
+
+/* DOBLES */
+
+.hidden{
+    display:none;
+}
+
+.double-options{
+    display:flex;
+    flex-wrap:wrap;
+    gap:12px;
+}
+
+.double-option{
+    padding:12px 16px;
+
+    border:1px solid var(--color-border);
+    border-radius:10px;
+
+    background:white;
+
+    font-family:inherit;
+    cursor:pointer;
+}
+
+.double-option.active{
+    border-color:var(--color-primary);
+    background:#fff4f4;
+    color:var(--color-primary);
+}
+
+
+/* VISTA PREVIA */
+
+.configuration-preview{
+    background:#f8fafc;
+
+    border:1px solid var(--color-border);
+    border-radius:20px;
+
+    padding:28px;
+
+    align-self:start;
+}
+
+.configuration-preview > p{
+    color:var(--color-text-light);
+    font-size:.9rem;
+    margin-bottom:25px;
+}
+
+.table-preview{
+    display:grid;
+
+    width:min(100%, 340px);
+
+    margin:0 auto 25px;
+
+    gap:6px;
+}
+
+.preview-4x4{
+    grid-template-columns:repeat(4, 1fr);
+}
+
+.preview-5x5{
+    grid-template-columns:repeat(5, 1fr);
+}
+
+.table-preview span{
+    aspect-ratio:1 / 1;
+
+    background:#ffffff;
+
+    border:1px solid #d9dde3;
+    border-radius:8px;
+}
+
+.table-preview span.comodin{
+    background:#FFE8E8;
+    border:2px solid var(--color-primary);
+}
+
+.preview-summary{
+    padding-top:20px;
+
+    border-top:1px solid var(--color-border);
+}
+
+.preview-summary p{
+    display:flex;
+    justify-content:space-between;
+
+    margin:8px 0;
+
+    font-size:.88rem;
+
+    color:var(--color-text-light);
+}
+
+.preview-summary strong{
+    color:var(--color-text);
+}
+
+
+/* NAVEGACIÓN */
+
+.creator-navigation{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+
+    margin-top:35px;
+    padding-top:25px;
+
+    border-top:1px solid var(--color-border);
+}
+
+.creator-navigation button{
+    border:none;
+    cursor:pointer;
+    font-family:inherit;
+}
+
+
+/* RESPONSIVE */
+
+@media (max-width:850px){
+
+    .configuration-layout{
+        grid-template-columns:1fr;
+    }
+
+}
+
+@media (max-width:600px){
+
+    .config-options-grid{
+        grid-template-columns:1fr;
+    }
+
+    .creator-navigation{
+        flex-direction:column-reverse;
+        gap:15px;
+    }
+
+    .creator-navigation button{
+        width:100%;
+    }
+
+}
+/* ==================================================
+   MINI CUADRICULAS - DOBLES
+================================================== */
+
+.double-position-grid{
+    display:grid;
+    grid-template-columns:repeat(3, 1fr);
+    gap:15px;
+}
+
+.double-position-card{
+    padding:16px;
+
+    border:2px solid var(--color-border);
+    border-radius:14px;
+
+    background:#ffffff;
+
+    font-family:inherit;
+    cursor:pointer;
+
+    transition:var(--transition);
+}
+
+.double-position-card:hover{
+    border-color:var(--color-primary);
+}
+
+.double-position-card.selected{
+    border-color:var(--color-primary);
+    background:#fff4f4;
+}
+
+.double-position-title{
+    display:block;
+
+    margin-bottom:12px;
+
+    font-size:.85rem;
+    font-weight:600;
+
+    text-align:center;
+}
+
+.mini-grid{
+    display:grid;
+
+    width:92px;
+
+    margin:0 auto;
+
+    gap:3px;
+}
+
+.mini-grid-4x4{
+    grid-template-columns:repeat(4, 1fr);
+}
+
+.mini-grid span{
+    aspect-ratio:1 / 1;
+
+    border:1px solid #ccd1d8;
+    border-radius:3px;
+
+    background:#ffffff;
+}
+
+.mini-grid span.active{
+    background:var(--color-primary);
+    border-color:var(--color-primary);
+}
+
+@media (max-width:700px){
+
+    .double-position-grid{
+        grid-template-columns:repeat(2, 1fr);
+    }
+
+}
+
+@media (max-width:450px){
+
+    .double-position-grid{
+        grid-template-columns:1fr;
+    }
+
+}
+/* ==================================================
+   DISTRIBUCIÓN DE TABLAS - PASO 2
+   Agregar al final de layout.css
+================================================== */
+
+.distribution-status{
+    display:flex;
+    justify-content:space-between;
+    gap:15px;
+    margin:18px 0;
+    padding:14px 16px;
+    border-radius:12px;
+    background:#f8fafc;
+    color:var(--color-text-light);
+    font-size:.9rem;
+}
+
+.distribution-status strong{
+    color:var(--color-text);
+}
+
+.distribution-grid{
+    display:grid;
+    grid-template-columns:repeat(3, 1fr);
+    gap:15px;
+}
+
+.distribution-card{
+    padding:16px;
+    border:2px solid var(--color-border);
+    border-radius:14px;
+    background:#ffffff;
+    transition:var(--transition);
+    cursor:pointer;
+}
+
+.distribution-card:hover{
+    border-color:var(--color-primary);
+}
+
+.distribution-card.selected{
+    border-color:var(--color-primary);
+    background:#fff4f4;
+}
+
+.distribution-card.has-quantity{
+    box-shadow:0 0 0 1px rgba(198,40,40,.12);
+}
+
+.distribution-counter{
+    display:grid;
+    grid-template-columns:36px 1fr 36px;
+    width:100%;
+    max-width:150px;
+    height:38px;
+    margin:14px auto 0;
+}
+
+.distribution-counter button{
+    border:0;
+    background:var(--color-primary);
+    color:#fff;
+    font-family:inherit;
+    font-size:1.1rem;
+    cursor:pointer;
+}
+
+.distribution-counter button:first-child{
+    border-radius:8px 0 0 8px;
+}
+
+.distribution-counter button:last-child{
+    border-radius:0 8px 8px 0;
+}
+
+.distribution-counter input{
+    width:100%;
+    min-width:0;
+    border:1px solid var(--color-border);
+    border-left:0;
+    border-right:0;
+    text-align:center;
+    font-family:inherit;
+    font-weight:600;
+    -moz-appearance:textfield;
+}
+
+.distribution-counter input::-webkit-outer-spin-button,
+.distribution-counter input::-webkit-inner-spin-button{
+    -webkit-appearance:none;
+    margin:0;
+}
+
+.distribution-actions{
+    display:flex;
+    flex-wrap:wrap;
+    gap:12px;
+    margin-top:20px;
+}
+
+.distribution-actions .btn-secondary{
+    cursor:pointer;
+}
+
+.distribution-message{
+    margin-top:16px;
+    padding:12px 14px;
+    border-radius:10px;
+    background:#f8fafc;
+    color:var(--color-text-light);
+    font-size:.9rem;
+}
+
+.distribution-message.ok{
+    background:#eefaf1;
+    color:#217a38;
+}
+
+.distribution-message.error{
+    background:#fff0f0;
+    color:var(--color-primary);
+}
+
+.distribution-card.format-unavailable{
+    opacity:.45;
+    cursor:not-allowed;
+}
+
+.distribution-card.format-unavailable:hover{
+    border-color:var(--color-border);
+}
+
+.distribution-card.format-unavailable .distribution-counter button{
+    cursor:not-allowed;
+}
+
+#btnVistaPrevia:disabled{
+    opacity:.45;
+    cursor:not-allowed;
+}
+
+@media (max-width:850px){
+    .distribution-grid{
+        grid-template-columns:repeat(2, 1fr);
+    }
+}
+
+@media (max-width:520px){
+    .distribution-grid{
+        grid-template-columns:1fr;
+    }
+
+    .distribution-status{
+        flex-direction:column;
+    }
+}
+
+/* ==================================================
+   ESTADO DE DISTRIBUCIÓN - VALIDACIÓN
+================================================== */
+
+.distribution-status{
+    transition:var(--transition);
+}
+
+.distribution-status.ok{
+    color:#217a38;
+}
+
+.distribution-status.error{
+    color:var(--color-primary);
+    font-weight:600;
+}
+
+.distribution-status.error strong{
+    color:var(--color-primary);
+}
+
+.distribution-message{
+    margin-top:10px;
+    margin-bottom:18px;
+}
+
+/* ==================================================
+   DISTRIBUCIÓN DE TABLAS - PASO 2
+   Agregar al final de layout.css
+================================================== */
+
+.distribution-status{
+    display:flex;
+    justify-content:space-between;
+    gap:15px;
+    margin:18px 0;
+    padding:14px 16px;
+    border-radius:12px;
+    background:#f8fafc;
+    color:var(--color-text-light);
+    font-size:.9rem;
+}
+
+.distribution-status strong{
+    color:var(--color-text);
+}
+
+.distribution-grid{
+    display:grid;
+    grid-template-columns:repeat(3, 1fr);
+    gap:15px;
+}
+
+.distribution-card{
+    padding:16px;
+    border:2px solid var(--color-border);
+    border-radius:14px;
+    background:#ffffff;
+    transition:var(--transition);
+    cursor:pointer;
+}
+
+.distribution-card:hover{
+    border-color:var(--color-primary);
+}
+
+.distribution-card.selected{
+    border-color:var(--color-primary);
+    background:#fff4f4;
+}
+
+.distribution-card.has-quantity{
+    box-shadow:0 0 0 1px rgba(198,40,40,.12);
+}
+
+.distribution-counter{
+    display:grid;
+    grid-template-columns:36px 1fr 36px;
+    width:100%;
+    max-width:150px;
+    height:38px;
+    margin:14px auto 0;
+}
+
+.distribution-counter button{
+    border:0;
+    background:var(--color-primary);
+    color:#fff;
+    font-family:inherit;
+    font-size:1.1rem;
+    cursor:pointer;
+}
+
+.distribution-counter button:first-child{
+    border-radius:8px 0 0 8px;
+}
+
+.distribution-counter button:last-child{
+    border-radius:0 8px 8px 0;
+}
+
+.distribution-counter input{
+    width:100%;
+    min-width:0;
+    border:1px solid var(--color-border);
+    border-left:0;
+    border-right:0;
+    text-align:center;
+    font-family:inherit;
+    font-weight:600;
+    -moz-appearance:textfield;
+}
+
+.distribution-counter input::-webkit-outer-spin-button,
+.distribution-counter input::-webkit-inner-spin-button{
+    -webkit-appearance:none;
+    margin:0;
+}
+
+.distribution-actions{
+    display:flex;
+    flex-wrap:wrap;
+    gap:12px;
+    margin-top:20px;
+}
+
+.distribution-actions .btn-secondary{
+    cursor:pointer;
+}
+
+.distribution-message{
+    margin-top:16px;
+    padding:12px 14px;
+    border-radius:10px;
+    background:#f8fafc;
+    color:var(--color-text-light);
+    font-size:.9rem;
+}
+
+.distribution-message.ok{
+    background:#eefaf1;
+    color:#217a38;
+}
+
+.distribution-message.error{
+    background:#fff0f0;
+    color:var(--color-primary);
+}
+
+.distribution-card.format-unavailable{
+    opacity:.45;
+    cursor:not-allowed;
+}
+
+.distribution-card.format-unavailable:hover{
+    border-color:var(--color-border);
+}
+
+.distribution-card.format-unavailable .distribution-counter button{
+    cursor:not-allowed;
+}
+
+#btnVistaPrevia:disabled{
+    opacity:.45;
+    cursor:not-allowed;
+}
+
+@media (max-width:850px){
+    .distribution-grid{
+        grid-template-columns:repeat(2, 1fr);
+    }
+}
+
+@media (max-width:520px){
+    .distribution-grid{
+        grid-template-columns:1fr;
+    }
+
+    .distribution-status{
+        flex-direction:column;
+    }
+}
+
+/* ==================================================
+   ESTADO DE DISTRIBUCIÓN - VALIDACIÓN
+================================================== */
+
+.distribution-status{
+    transition:var(--transition);
+}
+
+.distribution-status.ok{
+    color:#217a38;
+}
+
+.distribution-status.error{
+    color:var(--color-primary);
+    font-weight:600;
+}
+
+.distribution-status.error strong{
+    color:var(--color-primary);
+}
+
+.distribution-message{
+    margin-top:10px;
+    margin-bottom:18px;
+}
+
+/* Mini cuadrícula para formato 5x5 */
+.mini-grid-5x5{
+    grid-template-columns:repeat(5, 1fr);
+    width:110px;
+}

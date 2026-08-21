@@ -1,0 +1,94 @@
+/* ==================================================
+   PASO 4 - PAGO
+================================================== */
+
+.price-highlight-row strong{color:var(--color-primary);font-size:1.05rem;}
+
+.payment-layout{
+    display:grid;
+    grid-template-columns:minmax(0,1fr) 340px;
+    gap:32px;
+    align-items:start;
+}
+
+.payment-card,
+.payment-summary-card{
+    background:#fff;
+    border:1px solid var(--color-border);
+    border-radius:18px;
+    padding:26px;
+}
+
+.payment-card h3,
+.payment-summary-card h3{margin-top:0;}
+
+.payment-line{
+    display:flex;
+    justify-content:space-between;
+    gap:24px;
+    align-items:center;
+    padding:18px 0;
+    border-bottom:1px solid var(--color-border);
+}
+
+.payment-line div{display:flex;flex-direction:column;gap:4px;}
+.payment-line span{font-size:.84rem;color:var(--color-text-light);}
+
+.addon-card{
+    display:flex;
+    align-items:center;
+    gap:14px;
+    margin-top:20px;
+    padding:18px;
+    border:2px solid var(--color-border);
+    border-radius:14px;
+    cursor:pointer;
+    transition:.2s ease;
+}
+
+.addon-card:has(input:checked){
+    border-color:var(--color-primary);
+    background:#fff4f4;
+}
+
+.addon-card input{position:absolute;opacity:0;pointer-events:none;}
+
+.addon-check{
+    width:24px;height:24px;flex:0 0 24px;
+    border:2px solid #cbd5e1;border-radius:6px;
+    display:flex;align-items:center;justify-content:center;
+}
+
+.addon-card:has(input:checked) .addon-check{
+    border-color:var(--color-primary);background:var(--color-primary);
+}
+.addon-card:has(input:checked) .addon-check::after{content:'✓';color:#fff;font-weight:700;}
+
+.addon-info{display:flex;flex-direction:column;gap:4px;flex:1;}
+.addon-info small{color:var(--color-text-light);line-height:1.45;}
+.addon-price{color:var(--color-primary);white-space:nowrap;}
+
+.included-box{
+    margin-top:20px;padding:18px;border-radius:14px;background:#f8fafc;
+    display:flex;flex-direction:column;gap:8px;
+}
+.included-box strong{margin-bottom:2px;}
+.included-box span{font-size:.84rem;color:var(--color-text-light);}
+
+.payment-summary-row,
+.payment-total-row{
+    display:flex;justify-content:space-between;gap:18px;padding:12px 0;
+    border-bottom:1px solid var(--color-border);
+}
+.payment-summary-row span{color:var(--color-text-light);}
+.payment-total-row{margin-top:8px;padding-top:18px;border-bottom:0;font-size:1.15rem;}
+.payment-total-row strong{font-size:1.45rem;color:var(--color-primary);}
+.payment-note{text-align:center;color:var(--color-text-light);font-size:.8rem;margin:18px 0;}
+.payment-button{width:100%;}
+.payment-secure{text-align:center;font-size:.78rem;color:var(--color-text-light);margin:12px 0 0;}
+
+@media(max-width:900px){.payment-layout{grid-template-columns:1fr;}}
+@media(max-width:650px){
+    .addon-card{align-items:flex-start;}
+    .addon-price{margin-left:auto;}
+}

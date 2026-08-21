@@ -1,0 +1,156 @@
+/* ==================================================
+   DISTRIBUCIÓN DE TABLAS - PASO 2
+   Agregar al final de layout.css
+================================================== */
+
+.distribution-status{
+    display:flex;
+    justify-content:space-between;
+    gap:15px;
+    margin:18px 0;
+    padding:14px 16px;
+    border-radius:12px;
+    background:#f8fafc;
+    color:var(--color-text-light);
+    font-size:.9rem;
+}
+
+.distribution-status strong{
+    color:var(--color-text);
+}
+
+.distribution-grid{
+    display:grid;
+    grid-template-columns:repeat(3, 1fr);
+    gap:15px;
+}
+
+.distribution-card{
+    padding:16px;
+    border:2px solid var(--color-border);
+    border-radius:14px;
+    background:#ffffff;
+    transition:var(--transition);
+    cursor:pointer;
+}
+
+.distribution-card:hover{
+    border-color:var(--color-primary);
+}
+
+.distribution-card.selected{
+    border-color:var(--color-primary);
+    background:#fff4f4;
+}
+
+.distribution-card.has-quantity{
+    box-shadow:0 0 0 1px rgba(198,40,40,.12);
+}
+
+.distribution-counter{
+    display:grid;
+    grid-template-columns:36px 1fr 36px;
+    width:100%;
+    max-width:150px;
+    height:38px;
+    margin:14px auto 0;
+}
+
+.distribution-counter button{
+    border:0;
+    background:var(--color-primary);
+    color:#fff;
+    font-family:inherit;
+    font-size:1.1rem;
+    cursor:pointer;
+}
+
+.distribution-counter button:first-child{
+    border-radius:8px 0 0 8px;
+}
+
+.distribution-counter button:last-child{
+    border-radius:0 8px 8px 0;
+}
+
+.distribution-counter input{
+    width:100%;
+    min-width:0;
+    border:1px solid var(--color-border);
+    border-left:0;
+    border-right:0;
+    text-align:center;
+    font-family:inherit;
+    font-weight:600;
+    -moz-appearance:textfield;
+}
+
+.distribution-counter input::-webkit-outer-spin-button,
+.distribution-counter input::-webkit-inner-spin-button{
+    -webkit-appearance:none;
+    margin:0;
+}
+
+.distribution-actions{
+    display:flex;
+    flex-wrap:wrap;
+    gap:12px;
+    margin-top:20px;
+}
+
+.distribution-actions .btn-secondary{
+    cursor:pointer;
+}
+
+.distribution-message{
+    margin-top:16px;
+    padding:12px 14px;
+    border-radius:10px;
+    background:#f8fafc;
+    color:var(--color-text-light);
+    font-size:.9rem;
+}
+
+.distribution-message.ok{
+    background:#eefaf1;
+    color:#217a38;
+}
+
+.distribution-message.error{
+    background:#fff0f0;
+    color:var(--color-primary);
+}
+
+.distribution-card.format-unavailable{
+    opacity:.45;
+    cursor:not-allowed;
+}
+
+.distribution-card.format-unavailable:hover{
+    border-color:var(--color-border);
+}
+
+.distribution-card.format-unavailable .distribution-counter button{
+    cursor:not-allowed;
+}
+
+#btnVistaPrevia:disabled{
+    opacity:.45;
+    cursor:not-allowed;
+}
+
+@media (max-width:850px){
+    .distribution-grid{
+        grid-template-columns:repeat(2, 1fr);
+    }
+}
+
+@media (max-width:520px){
+    .distribution-grid{
+        grid-template-columns:1fr;
+    }
+
+    .distribution-status{
+        flex-direction:column;
+    }
+}

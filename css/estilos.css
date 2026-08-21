@@ -1,23 +1,572 @@
-*{
+@import url("variables.css");
+@import url("base.css");
+@import url("layout.css");
+@import url("components.css");
+.table-preview span.comodin {
+    background: #cf2929;
+    border-color: #cf2929;
+}
+/* ==================================================
+   MODO DE DISTRIBUCIÓN
+================================================== */
+
+.distribution-mode{
+    display:grid;
+    grid-template-columns:repeat(2,1fr);
+    gap:14px;
+    margin:20px 0;
+}
+
+.distribution-mode-option{
+    padding:16px 18px;
+    border:2px solid var(--color-border);
+    border-radius:14px;
+    background:#ffffff;
+    text-align:left;
+    font-family:inherit;
+    cursor:pointer;
+    transition:var(--transition);
+}
+
+.distribution-mode-option strong{
+    display:block;
+    margin-bottom:4px;
+    font-size:.95rem;
+}
+
+.distribution-mode-option span{
+    display:block;
+    color:var(--color-text-light);
+    font-size:.8rem;
+    line-height:1.45;
+}
+
+.distribution-mode-option.active{
+    border-color:var(--color-primary);
+    background:#fff4f4;
+}
+
+.distribution-mode-option.active strong{
+    color:var(--color-primary);
+}
+
+.automatic-distribution{
+    margin:18px 0;
+    padding:18px;
+    border:1px solid var(--color-border);
+    border-radius:14px;
+    background:#f8fafc;
+}
+
+.automatic-header{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    gap:20px;
+}
+
+.automatic-header p{
+    margin:4px 0 0;
+    color:var(--color-text-light);
+    font-size:.82rem;
+}
+
+.distribution-card.auto-selectable{
+    cursor:pointer;
+}
+
+.distribution-card.auto-selected{
+    border:2px solid var(--color-primary);
+    background:#fff4f4;
+}
+
+.distribution-card.auto-selected::after{
+    content:"✓";
+    position:absolute;
+    top:10px;
+    right:12px;
+    width:25px;
+    height:25px;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    border-radius:50%;
+    background:var(--color-primary);
+    color:#ffffff;
+    font-size:.8rem;
+    font-weight:700;
+}
+
+.distribution-card{
+    position:relative;
+}
+
+@media (max-width:650px){
+    .distribution-mode{
+        grid-template-columns:1fr;
+    }
+
+    .automatic-header{
+        flex-direction:column;
+        align-items:flex-start;
+    }
+}
+/* CAMBIO: selector automático junto a las cuadrículas */
+.automatic-selection-header {display:flex;justify-content:space-between;align-items:flex-end;gap:24px;margin-bottom:22px;}
+.automatic-selection-header h3 {margin:0 0 6px;}
+.automatic-selection-header .config-help {margin:0;}
+.automatic-selection-actions {display:flex;align-items:center;gap:14px;flex-shrink:0;}
+#contadorPresentaciones {font-size:14px;font-weight:600;color:#555;}
+.btn-select-all {padding:12px 20px;border:1.5px solid #cf2929;border-radius:12px;background:#fff;color:#cf2929;font-family:inherit;font-weight:600;cursor:pointer;transition:.2s ease;}
+.btn-select-all:hover {background:#fff4f4;}
+@media(max-width:768px){.automatic-selection-header{flex-direction:column;align-items:stretch}.automatic-selection-actions{justify-content:space-between}}
+
+/* ==================================================
+   PASO 3 - VISTA PREVIA
+================================================== */
+
+.final-preview-layout{
+    display:grid;
+    grid-template-columns:minmax(0,1fr) 340px;
+    gap:32px;
+    align-items:start;
+}
+
+.final-preview-main,
+.final-preview-summary{
+    border:1px solid var(--color-border);
+    border-radius:18px;
+    background:#fff;
+    padding:24px;
+}
+
+.final-preview-toolbar{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    gap:18px;
+    margin-bottom:22px;
+}
+
+.preview-kicker{
+    display:block;
+    color:var(--color-primary);
+    font-size:.78rem;
+    font-weight:700;
+    text-transform:uppercase;
+    letter-spacing:.04em;
+    margin-bottom:4px;
+}
+
+.final-preview-toolbar h3{
     margin:0;
+}
+
+.generated-table{
+    display:grid;
+    gap:8px;
+    max-width:620px;
+    margin:0 auto;
+}
+
+.preview-generated-4x4{
+    grid-template-columns:repeat(4,1fr);
+}
+
+.preview-generated-5x5{
+    grid-template-columns:repeat(5,1fr);
+}
+
+.generated-card-cell{
+    aspect-ratio:1 / 1.25;
+    border:1px solid var(--color-border);
+    border-radius:10px;
+    background:#f8fafc;
+    display:flex;
+    flex-direction:column;
+    justify-content:space-between;
+    padding:8px;
+    min-width:0;
+}
+
+.generated-card-cell.is-double{
+    border:2px solid var(--color-primary);
+    background:#fff3f3;
+}
+
+.generated-card-number{
+    font-size:.72rem;
+    font-weight:700;
+    color:var(--color-primary);
+}
+
+.generated-card-label{
+    font-size:.68rem;
+    line-height:1.2;
+    color:var(--color-text);
+    text-align:center;
+}
+
+.preview-note{
+    margin:18px 0 0;
+    color:var(--color-text-light);
+    font-size:.82rem;
+    text-align:center;
+}
+
+.final-preview-summary h3{
+    margin-top:0;
+    margin-bottom:18px;
+}
+
+.final-summary-row,
+.preview-breakdown-row{
+    display:flex;
+    justify-content:space-between;
+    gap:18px;
+    padding:10px 0;
+    border-bottom:1px solid var(--color-border);
+}
+
+.final-summary-row span,
+.preview-breakdown-row span{
+    color:var(--color-text-light);
+}
+
+.final-summary-row strong,
+.preview-breakdown-row strong{
+    text-align:right;
+}
+
+.final-preview-breakdown{
+    margin-top:18px;
+}
+
+.preview-breakdown-row:last-child{
+    border-bottom:0;
+}
+
+@media(max-width:900px){
+    .final-preview-layout{
+        grid-template-columns:1fr;
+    }
+}
+
+@media(max-width:650px){
+    .final-preview-toolbar{
+        flex-direction:column;
+        align-items:flex-start;
+    }
+
+    .generated-table{
+        gap:5px;
+    }
+
+    .generated-card-cell{
+        padding:5px;
+        border-radius:7px;
+    }
+
+    .generated-card-label{
+        font-size:.58rem;
+    }
+}
+/* CAMBIO: selector automático junto a las cuadrículas */
+.automatic-selection-header {display:flex;justify-content:space-between;align-items:flex-end;gap:24px;margin-bottom:22px;}
+.automatic-selection-header h3 {margin:0 0 6px;}
+.automatic-selection-header .config-help {margin:0;}
+.automatic-selection-actions {display:flex;align-items:center;gap:14px;flex-shrink:0;}
+#contadorPresentaciones {font-size:14px;font-weight:600;color:#555;}
+.btn-select-all {padding:12px 20px;border:1.5px solid #cf2929;border-radius:12px;background:#fff;color:#cf2929;font-family:inherit;font-weight:600;cursor:pointer;transition:.2s ease;}
+.btn-select-all:hover {background:#fff4f4;}
+@media(max-width:768px){.automatic-selection-header{flex-direction:column;align-items:stretch}.automatic-selection-actions{justify-content:space-between}}
+
+/* ==================================================
+   PASO 3 - VISTA PREVIA
+================================================== */
+
+.final-preview-layout{
+    display:grid;
+    grid-template-columns:minmax(0,1fr) 340px;
+    gap:32px;
+    align-items:start;
+}
+
+.final-preview-main,
+.final-preview-summary{
+    border:1px solid var(--color-border);
+    border-radius:18px;
+    background:#fff;
+    padding:24px;
+}
+
+.final-preview-toolbar{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    gap:18px;
+    margin-bottom:22px;
+}
+
+.preview-kicker{
+    display:block;
+    color:var(--color-primary);
+    font-size:.78rem;
+    font-weight:700;
+    text-transform:uppercase;
+    letter-spacing:.04em;
+    margin-bottom:4px;
+}
+
+.final-preview-toolbar h3{
+    margin:0;
+}
+
+.generated-table{
+    display:grid;
+    gap:8px;
+    max-width:620px;
+    margin:0 auto;
+}
+
+.preview-generated-4x4{
+    grid-template-columns:repeat(4,1fr);
+}
+
+.preview-generated-5x5{
+    grid-template-columns:repeat(5,1fr);
+}
+
+.generated-card-cell{
+    aspect-ratio:1 / 1.25;
+    border:1px solid var(--color-border);
+    border-radius:10px;
+    background:#f8fafc;
+    display:flex;
+    flex-direction:column;
+    justify-content:space-between;
+    padding:8px;
+    min-width:0;
+}
+
+.generated-card-cell.is-double{
+    border:2px solid var(--color-primary);
+    background:#fff3f3;
+}
+
+.generated-card-number{
+    font-size:.72rem;
+    font-weight:700;
+    color:var(--color-primary);
+}
+
+.generated-card-label{
+    font-size:.68rem;
+    line-height:1.2;
+    color:var(--color-text);
+    text-align:center;
+}
+
+.preview-note{
+    margin:18px 0 0;
+    color:var(--color-text-light);
+    font-size:.82rem;
+    text-align:center;
+}
+
+.final-preview-summary h3{
+    margin-top:0;
+    margin-bottom:18px;
+}
+
+.final-summary-row,
+.preview-breakdown-row{
+    display:flex;
+    justify-content:space-between;
+    gap:18px;
+    padding:10px 0;
+    border-bottom:1px solid var(--color-border);
+}
+
+.final-summary-row span,
+.preview-breakdown-row span{
+    color:var(--color-text-light);
+}
+
+.final-summary-row strong,
+.preview-breakdown-row strong{
+    text-align:right;
+}
+
+.final-preview-breakdown{
+    margin-top:18px;
+}
+
+.preview-breakdown-row:last-child{
+    border-bottom:0;
+}
+
+@media(max-width:900px){
+    .final-preview-layout{
+        grid-template-columns:1fr;
+    }
+}
+
+@media(max-width:650px){
+    .final-preview-toolbar{
+        flex-direction:column;
+        align-items:flex-start;
+    }
+
+    .generated-table{
+        gap:5px;
+    }
+
+    .generated-card-cell{
+        padding:5px;
+        border-radius:7px;
+    }
+
+    .generated-card-label{
+        font-size:.58rem;
+    }
+}
+
+/* ==================================================
+   PASO 3 - IMÁGENES REALES + MARCA DE AGUA
+================================================== */
+
+.generated-card-cell{
+    position:relative;
+    overflow:hidden;
     padding:0;
-    box-sizing:border-box;
+    background:#fff;
 }
 
-body{
-    font-family:Arial, Helvetica, sans-serif;
-    background:#f5f5f5;
-    color:#333;
+.generated-card-image{
+    width:100%;
+    height:100%;
+    display:block;
+    object-fit:cover;
 }
 
-header{
-    background:#c40000;
-    color:white;
-    padding:20px;
+.generated-card-number{
+    position:absolute;
+    top:5px;
+    left:6px;
+    z-index:4;
+
+    min-width:22px;
+    height:22px;
+
+    display:flex;
+    align-items:center;
+    justify-content:center;
+
+    padding:0 5px;
+    border-radius:7px;
+
+    background:rgba(255,255,255,.88);
+    color:var(--color-primary);
+
+    font-size:.68rem;
+    font-weight:700;
+
+    box-shadow:0 1px 5px rgba(0,0,0,.08);
 }
 
-main{
-    max-width:1200px;
-    margin:auto;
-    padding:30px;
+.generated-watermark{
+    position:absolute;
+    left:50%;
+    top:50%;
+    z-index:3;
+
+    transform:translate(-50%,-50%) rotate(-32deg);
+
+    width:150%;
+
+    color:rgba(255,255,255,.78);
+    text-shadow:
+        0 1px 2px rgba(0,0,0,.35),
+        0 0 5px rgba(0,0,0,.18);
+
+    font-size:clamp(.62rem,1.2vw,1rem);
+    font-weight:700;
+    letter-spacing:.03em;
+    text-align:center;
+
+    pointer-events:none;
+    user-select:none;
+}
+
+.generated-card-cell.is-double{
+    border:3px solid var(--color-primary);
+    background:#fff;
+}
+
+.generated-card-cell.image-error{
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    background:#f8fafc;
+}
+
+.generated-card-fallback{
+    color:var(--color-text-light);
+    font-size:.75rem;
+    text-align:center;
+}
+
+@media(max-width:650px){
+    .generated-watermark{
+        font-size:.52rem;
+    }
+
+    .generated-card-number{
+        top:3px;
+        left:3px;
+        min-width:18px;
+        height:18px;
+        font-size:.56rem;
+        border-radius:5px;
+    }
+}
+
+
+/* ==================================================
+   AJUSTE VISTA PREVIA - CARTAS VERTICALES COMPLETAS
+   Conserva la proporción de las imágenes sin recortarlas.
+================================================== */
+
+.generated-table{
+    align-items:start;
+}
+
+/* Proporción vertical de la carta */
+.generated-card-cell{
+    aspect-ratio: 5 / 7;
+    padding:0;
+    background:#fff;
+    overflow:hidden;
+}
+
+/* Mostrar siempre la imagen completa, sin recortar nombre ni bordes */
+.generated-card-image{
+    width:100%;
+    height:100%;
+    display:block;
+    object-fit:contain;
+    object-position:center;
+}
+
+/* Mantener visible el borde que identifica los dobles */
+.generated-card-cell.is-double{
+    border:3px solid var(--color-primary);
+    background:#fff;
+}
+
+@media(max-width:650px){
+    .generated-card-cell{
+        aspect-ratio: 5 / 7;
+    }
 }

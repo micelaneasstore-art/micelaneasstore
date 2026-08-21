@@ -6,31 +6,151 @@
     <title>MicelaneasStore</title>
 
     <meta name="description" content="MicelaneasStore - Lotería Mexicana, rascaditos, figuras y accesorios.">
-
+    
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="css/estilos.css">
 </head>
 
 <body>
 
-    <header>
-        <h1>MicelaneasStore</h1>
-    </header>
+   <header class="header">
 
-    <main>
+    <div class="header-content">
 
-        <section id="inicio">
+        <div class="header-logo">
+            MicelaneasStore
+        </div>
 
-            <h2>Bienvenido</h2>
+        <nav class="header-menu">
+
+            <a href="#">Inicio</a>
+            <a href="#">Comprar</a>
+            <a href="#">Crear</a>
+            <a href="#">Colecciones</a>
+            <a href="#">Recursos</a>
+
+        </nav>
+
+        <div class="header-actions">
+
+            <button class="btn-login">
+                Mi Cuenta
+            </button>
+
+        </div>
+
+    </div>
+
+</header>
+
+<main>
+
+    <section class="hero">
+
+        <div class="container hero-content">
+
+            <div class="hero-text">
+
+                <span class="hero-badge">
+                    Plataforma para organizadores de loterías
+                </span>
+
+                <h1>
+                    Todo lo que necesitas para tu lotería, en un solo lugar.
+                </h1>
+
+                <p>
+                    Compra productos para lotería, descarga diseños digitales, crea tus propias tablas y personaliza tus juegos desde una sola plataforma.
+                </p>
+
+                <div class="hero-buttons">
+
+                    <a href="#" class="btn-primary">
+                        Comprar ahora
+                    </a>
+
+                    <a href="#" class="btn-secondary">
+                        Crear lotería
+                    </a>
+
+                </div>
+
+            </div>
+
+            <div class="hero-image">
+
+                <img
+                    src="img/hero.webp"
+                    alt="Productos y plataforma MicelaneasStore"
+                    class="hero-img">
+            </div>
+
+        </div>
+
+    </section>
+<section class="home-selector">
+
+    <div class="container">
+
+        <div class="section-header">
+
+            <h2>Elige cómo quieres comenzar</h2>
 
             <p>
-                Estamos construyendo la nueva tienda de MicelaneasStore.
+                Compra productos o crea tus propias loterías desde una sola plataforma.
             </p>
 
-        </section>
+        </div>
 
-    </main>
+        <div class="selector-grid">
 
-    <script src="js/app.js"></script>
+            <article class="selector-card">
 
+                <img src="img/comprar.webp" alt="Comprar productos">
+
+                <div class="selector-content">
+
+                    <h3>Comprar productos</h3>
+
+                    <p>
+                        Todo para organizar tu lotería.
+                    </p>
+
+                    <a href="#" class="btn-primary">
+                        Ver tienda
+                    </a>
+
+                </div>
+
+            </article>
+
+            <article class="selector-card">
+
+                <img src="img/crear.webp" alt="Crear lotería">
+
+                <div class="selector-content">
+
+                    <h3>Crear lotería</h3>
+
+                    <p>
+                        Diseña tus propias loterías digitales.
+                    </p>
+
+                    <a href="#" class="btn-primary">
+                        Comenzar
+                    </a>
+
+                </div>
+
+            </article>
+
+        </div>
+
+    </div>
+
+</section>
+</main>
 </body>
 </html>

@@ -1,0 +1,82 @@
+/* =========================================================
+   MICELANEASSTORE PLATFORM
+   VARIABLES GLOBALES
+   Versión 0.2.0
+========================================================= */
+
+:root{
+
+    /*=========================
+      COLORES
+    =========================*/
+
+    --color-primary:#C62828;
+    --color-primary-dark:#A61F1F;
+
+    --color-secondary:#1E3A5F;
+
+    --color-success:#22C55E;
+    --color-warning:#F59E0B;
+    --color-danger:#DC2626;
+
+    --color-white:#FFFFFF;
+
+    --color-background:#F8FAFC;
+
+    --color-border:#E5E7EB;
+
+    --color-text:#1F2937;
+
+    --color-text-light:#6B7280;
+
+
+    /*=========================
+      TIPOGRAFÍA
+    =========================*/
+
+    --font-family:'Poppins',sans-serif;
+
+
+    /*=========================
+      TAMAÑOS
+    =========================*/
+
+    --container-width:1280px;
+
+    --header-height:80px;
+
+    --radius-small:8px;
+    --radius-medium:12px;
+    --radius-large:18px;
+
+
+    /*=========================
+      ESPACIADOS
+    =========================*/
+
+    --space-1:8px;
+    --space-2:16px;
+    --space-3:24px;
+    --space-4:32px;
+    --space-5:48px;
+    --space-6:64px;
+
+
+    /*=========================
+      SOMBRAS
+    =========================*/
+
+    --shadow-small:0 2px 8px rgba(0,0,0,.08);
+
+    --shadow-medium:0 6px 20px rgba(0,0,0,.10);
+
+    --shadow-large:0 12px 30px rgba(0,0,0,.15);
+
+
+    /*=========================
+      TRANSICIONES
+    =========================*/
+
+    --transition:.30s ease;
+
+}

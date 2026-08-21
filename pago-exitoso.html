@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="es-MX">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Pago recibido | MicelaneasStore</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/payment-result.css">
+</head>
+<body>
+<div class="result-wrap">
+  <main class="result-card">
+    <span class="result-badge">Paso 5 de 5</span>
+    <h1 id="tituloEstado">Verificando tu pago…</h1>
+    <p id="textoEstado">Estamos confirmando el pago directamente con Mercado Pago.</p>
+
+    <div id="resumenPago" class="result-summary" hidden></div>
+
+    <div class="result-actions">
+      <a class="result-btn" href="crear.html">Volver al creador</a>
+    </div>
+  </main>
+</div>
+
+<script>
+(async function () {
+    const params = new URLSearchParams(window.location.search);
+    const paymentId = params.get("payment_id");
+
+    const titulo = document.getElementById("tituloEstado");
+    const texto = document.getElementById("textoEstado");
+    const resumen = document.getElementById("resumenPago");
+
+    if (!paymentId) {
+        titulo.textContent = "No pudimos identificar el pago";
+        titulo.className = "status-error";
+        texto.textContent = "Regresa a tu pedido y vuelve a intentarlo.";
+        return;
+    }
+
+    try {
+        const r = await fetch(`/api/verificar-pago?payment_id=${encodeURIComponent(paymentId)}`);
+        const data = await r.json();
+
+        if (!r.ok || !data.valido) {
+            titulo.textContent =
+                data.status === "pending"
+                    ? "Tu pago está pendiente"
+                    : "El pago todavía no está confirmado";
+
+            titulo.className =
+                data.status === "pending" ? "status-warn" : "status-error";
+
+            texto.textContent =
+                "No habilitaremos ninguna descarga hasta confirmar el pago con Mercado Pago.";
+            return;
+        }
+
+        titulo.textContent = "¡Pago confirmado!";
+        titulo.className = "status-ok";
+        texto.textContent =
+            "Tu compra fue validada correctamente. El siguiente paso será generar aquí tus archivos de descarga.";
+
+        const p = data.pedido;
+
+        resumen.hidden = false;
+        resumen.innerHTML = `
+            <div class="result-row"><span>Tablas</span><strong>${p.cantidad}</strong></div>
+            <div class="result-row"><span>Formato</span><strong>${p.formato.toUpperCase()}</strong></div>
+            <div class="result-row"><span>Mazo</span><strong>${p.agregarMazo ? "Sí" : "No"}</strong></div>
+            <div class="result-row"><span>Total pagado</span><strong>$${p.total} MXN</strong></div>
+            <div class="result-row"><span>Pago</span><strong>#${data.payment_id}</strong></div>
+        `;
+
+    } catch (e) {
+        titulo.textContent = "No pudimos verificar el pago";
+        titulo.className = "status-error";
+        texto.textContent = "Intenta nuevamente en unos minutos.";
+    }
+})();
+</script>
+</body>
+</html>
