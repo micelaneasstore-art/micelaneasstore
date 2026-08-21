@@ -141,13 +141,23 @@
                 if (!rr.ok || !dd.url) throw new Error(dd.error || "No se pudo generar el archivo.");
                 etiqueta.textContent = "Descargar";
                 mensajeGenerador.textContent = "Archivo listo. El enlace de descarga es temporal por seguridad.";
+                const archivo = await fetch(dd.url);
+                if (!archivo.ok) {
+                    throw new Error("El PDF se generó, pero no se pudo iniciar la descarga.");
+                }
+
+                const blob = await archivo.blob();
+                const urlLocal = URL.createObjectURL(blob);
+
                 const enlace = document.createElement("a");
-                enlace.href = dd.url;
-                enlace.download = "";
+                enlace.href = urlLocal;
+                enlace.download = dd.nombre || "MicelaneasStore.pdf";
                 enlace.style.display = "none";
                 document.body.appendChild(enlace);
                 enlace.click();
                 enlace.remove();
+
+                setTimeout(() => URL.revokeObjectURL(urlLocal), 30000);
             } catch (err) {
                 etiqueta.textContent = anterior;
                 mensajeGenerador.textContent = err.message || "No se pudo generar el archivo.";
