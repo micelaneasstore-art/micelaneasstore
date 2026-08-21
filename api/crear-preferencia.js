@@ -30,6 +30,11 @@ module.exports = async function handler(req, res) {
         const pedido = normalizarPedido(req.body || {});
         const externalReference = firmarPedido(pedido);
 
+        console.log("Mercado Pago - external_reference", {
+            longitud: externalReference.length,
+            referencia: externalReference
+        });
+
         const nombres = {
             tradicional: "Lotería Tradicional",
             animada: "Lotería Animada",

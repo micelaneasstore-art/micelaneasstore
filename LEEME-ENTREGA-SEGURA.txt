@@ -106,3 +106,38 @@ y/o
 
 El campo status_detail será especialmente útil para diagnosticar por qué
 Mercado Pago está rechazando la operación.
+
+
+ACTUALIZACIÓN V3 - REFERENCIA COMPACTA
+---------------------------------------
+Se cambió el external_reference largo (JSON + base64url) por una referencia
+compacta firmada.
+
+La nueva referencia conserva:
+- cantidad
+- formato
+- diseño
+- mazo
+- las 7 cantidades de distribución
+- timestamp
+- nonce
+- firma HMAC
+
+Pero usa códigos muy cortos y números en base36.
+
+Ejemplo aproximado:
+v1|u|4|t|0|0.0.u.0.0.0.0|m...|AbCdEf|firma
+
+También se conserva compatibilidad de lectura con referencias antiguas.
+
+En /api/crear-preferencia ahora se registra:
+Mercado Pago - external_reference
+{ longitud: ... }
+
+PRUEBA
+------
+1. Despliega V3.
+2. Revisa Logs al crear el pago.
+3. Confirma que la longitud sea muy inferior a 255 caracteres.
+4. Haz UNA compra de prueba.
+5. Si falla, revisa el nuevo merchant_order y sus logs.
