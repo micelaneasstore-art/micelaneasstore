@@ -20,6 +20,7 @@ async function guardarYFirmar({ pathname, bytes, contentType = "application/pdf"
   const { presignedUrl } = await presignUrl(token, {
     pathname,
     operation: "get",
+    access: "private",
     validUntil,
     useCache: false
   });
