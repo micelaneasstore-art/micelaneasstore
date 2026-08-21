@@ -64,3 +64,45 @@ SIGUIENTE PASO
 Conectar almacenamiento privado de originales y generar:
 - PDF de tablas
 - PDF de mazo opcional
+
+
+ACTUALIZACIÓN V2 - WEBHOOK DE DIAGNÓSTICO
+------------------------------------------
+Se corrigió api/webhook-mercadopago.js:
+
+1. Ya NO responde 200 antes de consultar a Mercado Pago.
+   Esto era importante en Vercel: al cerrar la respuesta primero,
+   la función serverless podía terminar antes del fetch.
+
+2. Distingue:
+   - payment
+   - merchant_order
+
+3. Si recibe merchant_order:
+   - consulta /merchant_orders/{id}
+   - muestra status/order_status/paid_amount
+   - obtiene los payment IDs asociados
+   - consulta /v1/payments/{payment_id}
+
+4. Registra:
+   - status
+   - status_detail
+   - medio de pago
+   - live_mode
+   - collector_id
+   - importe
+   - referencia externa
+   - validación de la referencia firmada
+
+5. Si Mercado Pago falla temporalmente, devuelve HTTP 500 para permitir reintentos.
+
+SIGUIENTE PRUEBA
+----------------
+Sube esta versión, haz UNA compra de prueba y revisa Vercel > Logs.
+Busca:
+"Mercado Pago - merchant order"
+y/o
+"Mercado Pago - detalle de pago"
+
+El campo status_detail será especialmente útil para diagnosticar por qué
+Mercado Pago está rechazando la operación.
