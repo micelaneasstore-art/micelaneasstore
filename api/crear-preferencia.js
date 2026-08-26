@@ -38,7 +38,15 @@ module.exports = async function handler(req, res) {
         const nombres = {
             tradicional: "Lotería Tradicional",
             animada: "Lotería Animada",
-            gorditos: "Gorditos"
+            gorditos: "Gorditos",
+            "fiesta-mexicana": "Fiesta Mexicana",
+            "dia-muertos": "Día de Muertos",
+            "san-valentin": "San Valentín",
+            infantil: "Lotería Infantil",
+            vaquera: "Lotería Vaquera",
+            "dia-madres": "Mamá Mexicana",
+            maestro: "Día del Maestro",
+            navidad: "Lotería de Navidad"
         };
 
         const items = [

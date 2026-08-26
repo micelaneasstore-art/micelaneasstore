@@ -1,6 +1,10 @@
 const { unzipSync } = require("fflate");
 
-const COLECCIONES = new Set(["tradicional", "animada", "gorditos"]);
+const COLECCIONES = new Set([
+  "tradicional", "animada", "gorditos", "fiesta-mexicana",
+  "dia-muertos", "san-valentin", "infantil", "vaquera",
+  "dia-madres", "maestro", "navidad"
+]);
 const cache = new Map();
 
 async function streamToBuffer(stream) {

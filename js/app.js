@@ -24,8 +24,44 @@ designButtons.forEach(button => {
         if (btnContinuar) {
             btnContinuar.disabled = false;
         }
+
+        if (card.classList.contains("collection-card")) {
+            cerrarColecciones();
+            document.getElementById("moreDesignsCard")?.classList.add("selected");
+        }
     });
 });
+
+/* ==================================================
+   MÁS DISEÑOS - GALERÍA DE COLECCIONES
+================================================== */
+const collectionsModal = document.getElementById("collectionsModal");
+const btnVerColecciones = document.getElementById("btnVerColecciones");
+const btnCerrarColecciones = document.getElementById("btnCerrarColecciones");
+
+function abrirColecciones() {
+    if (!collectionsModal) return;
+    collectionsModal.classList.add("is-open");
+    collectionsModal.setAttribute("aria-hidden", "false");
+    document.body.classList.add("collections-open");
+}
+
+function cerrarColecciones() {
+    if (!collectionsModal) return;
+    collectionsModal.classList.remove("is-open");
+    collectionsModal.setAttribute("aria-hidden", "true");
+    document.body.classList.remove("collections-open");
+}
+
+btnVerColecciones?.addEventListener("click", abrirColecciones);
+btnCerrarColecciones?.addEventListener("click", cerrarColecciones);
+collectionsModal?.querySelectorAll("[data-close-collections]").forEach(el => {
+    el.addEventListener("click", cerrarColecciones);
+});
+document.addEventListener("keydown", e => {
+    if (e.key === "Escape") cerrarColecciones();
+});
+
 
 
 /* ==================================================
@@ -169,18 +205,31 @@ const patronesPorFormato = {
 };
 
 const coleccionesImagenes = {
-    tradicional: {
-        ruta: "img/preview/tradicional/",
-        extension: ".png"
-    },
-    animada: {
-        ruta: "img/preview/animada/",
-        extension: ".png"
-    },
-    gorditos: {
-        ruta: "img/preview/gorditos/",
-        extension: ".png"
-    }
+    tradicional: { ruta: "img/preview/tradicional/", extension: ".webp", pad: true },
+    animada: { ruta: "img/preview/animada/", extension: ".webp", pad: true },
+    gorditos: { ruta: "img/preview/gorditos/", extension: ".webp", pad: true },
+    "fiesta-mexicana": { ruta: "img/preview/FiestaMx/", extension: ".webp", pad: true },
+    "dia-muertos": { ruta: "img/preview/DiaMuertos/", extension: ".webp", pad: true },
+    "san-valentin": { ruta: "img/preview/SanValentin/", extension: ".webp", pad: true },
+    infantil: { ruta: "img/preview/Infantil/", extension: ".webp", pad: true },
+    vaquera: { ruta: "img/preview/Vaquera/", extension: ".webp", pad: true },
+    "dia-madres": { ruta: "img/preview/DiaMadres/", extension: ".webp", pad: true },
+    maestro: { ruta: "img/preview/Maestro/", extension: ".webp", pad: true },
+    navidad: { ruta: "img/preview/Navidad/", extension: ".webp", pad: true }
+};
+
+const nombresDisenos = {
+    tradicional: "Lotería Tradicional",
+    animada: "Lotería Animada",
+    gorditos: "Gorditos",
+    "fiesta-mexicana": "Fiesta Mexicana",
+    "dia-muertos": "Día de Muertos",
+    "san-valentin": "San Valentín",
+    infantil: "Lotería Infantil",
+    vaquera: "Lotería Vaquera",
+    "dia-madres": "Mamá Mexicana",
+    maestro: "Día del Maestro",
+    navidad: "Lotería de Navidad"
 };
 
 function obtenerConfiguracionColeccion() {
@@ -203,12 +252,6 @@ if (btnContinuar) {
         paso1.style.display = "none";
         paso2.style.display = "block";
         actualizarPasoVisual(2);
-
-        const nombresDisenos = {
-            tradicional: "Lotería Tradicional",
-            animada: "Lotería Animada",
-            gorditos: "Gorditos"
-        };
 
         resumenDiseno.textContent =
             nombresDisenos[diseñoSeleccionado] || diseñoSeleccionado;
@@ -1017,7 +1060,10 @@ function generarMuestraPaso3() {
 
         const imagen = document.createElement("img");
         imagen.className = "generated-card-image";
-        imagen.src = `${configColeccion.ruta}${figura}${configColeccion.extension}`;
+        const nombreFigura = configColeccion.pad
+            ? String(figura).padStart(2, "0")
+            : String(figura);
+        imagen.src = `${configColeccion.ruta}${nombreFigura}${configColeccion.extension}`;
         imagen.alt = `Figura ${figura}`;
         imagen.loading = "lazy";
 

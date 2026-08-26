@@ -5,7 +5,11 @@ import { put } from "@vercel/blob";
 import { zipSync } from "fflate";
 
 const ROOT = process.cwd();
-const COLECCIONES = ["tradicional", "animada", "gorditos"];
+const COLECCIONES = [
+  "tradicional", "animada", "gorditos", "fiesta-mexicana",
+  "dia-muertos", "san-valentin", "infantil", "vaquera",
+  "dia-madres", "maestro", "navidad"
+];
 
 function cargarEnvLocal() {
   const archivo = path.join(ROOT, ".env.local");
@@ -83,5 +87,5 @@ for (const coleccion of COLECCIONES) {
   console.log(`    ${resultado.pathname || pathname}`);
 }
 
-console.log("\n✓ Las 3 colecciones quedaron almacenadas en Blob privado.");
+console.log("\n✓ Las 11 colecciones quedaron almacenadas en Blob privado.");
 console.log("Ahora puedes ejecutar PRIVATIZAR_ORIGINALES.bat para quitar los originales de /img.\n");

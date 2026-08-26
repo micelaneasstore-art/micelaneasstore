@@ -4,7 +4,7 @@ cd /d "%~dp0"
 
 echo.
 echo ==========================================================
-echo  MicelaneasStore - subir originales a Blob PRIVADO (V5.1)
+echo  MicelaneasStore - subir originales a Blob PRIVADO (V5.6)
 echo ==========================================================
 echo.
 echo Esta version NO vincula el proyecto con Vercel CLI.
@@ -27,7 +27,7 @@ echo ==========================================================
 echo  TODO SALIO BIEN
 echo ==========================================================
 echo.
-echo Las 3 colecciones ya quedaron en Blob privado.
+echo Las 11 colecciones ya quedaron en Blob privado.
 echo NO ejecutes PRIVATIZAR_ORIGINALES.bat hasta verificar
 echo primero en Vercel ^> Storage ^> Manage Blobs.
 echo.

@@ -17,7 +17,11 @@ const RANGOS = [
 ];
 
 const PRECIO_MAZO = 10;
-const DISENOS = new Set(["tradicional", "animada", "gorditos"]);
+const DISENOS = new Set([
+    "tradicional", "animada", "gorditos", "fiesta-mexicana",
+    "dia-muertos", "san-valentin", "infantil", "vaquera",
+    "dia-madres", "maestro", "navidad"
+]);
 const FORMATOS = new Set(["4x4", "5x5"]);
 
 const DISTRIBUCIONES = [
@@ -33,13 +37,29 @@ const DISTRIBUCIONES = [
 const DISENO_CODE = {
     tradicional: "t",
     animada: "a",
-    gorditos: "g"
+    gorditos: "g",
+    "fiesta-mexicana": "x",
+    "dia-muertos": "u",
+    "san-valentin": "s",
+    infantil: "i",
+    vaquera: "v",
+    "dia-madres": "r",
+    maestro: "m",
+    navidad: "n"
 };
 
 const CODE_DISENO = {
     t: "tradicional",
     a: "animada",
-    g: "gorditos"
+    g: "gorditos",
+    x: "fiesta-mexicana",
+    u: "dia-muertos",
+    s: "san-valentin",
+    i: "infantil",
+    v: "vaquera",
+    r: "dia-madres",
+    m: "maestro",
+    n: "navidad"
 };
 
 const FORMATO_CODE = {

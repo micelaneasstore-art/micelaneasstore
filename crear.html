@@ -22,6 +22,7 @@
     <link rel="stylesheet" href="css/estilos.css">
     <link rel="stylesheet" href="css/responsive-mobile.css">
     <link rel="stylesheet" href="css/pago.css">
+    <link rel="stylesheet" href="css/colecciones.css">
 </head>
 
 <body>
@@ -255,7 +256,7 @@
                     </article>
 
 
-                    <article class="design-card">
+                    <article class="design-card more-designs-card" id="moreDesignsCard">
 
                         <!-- MÁS DISEÑOS -->
                         <div class="design-image">
@@ -275,7 +276,7 @@
                                 Explora todas nuestras colecciones y encuentra el estilo ideal para tu lotería.
                             </p>
 
-                            <button class="btn-primary">
+                            <button type="button" class="btn-primary" id="btnVerColecciones">
                                 Ver colecciones
                             </button>
 
@@ -310,6 +311,65 @@
                         </div>
 
                     </article>
+                </div>
+
+
+                <!-- GALERÍA DE MÁS DISEÑOS -->
+                <div class="collections-modal" id="collectionsModal" aria-hidden="true">
+                    <div class="collections-modal-backdrop" data-close-collections></div>
+                    <div class="collections-modal-dialog" role="dialog" aria-modal="true" aria-labelledby="collectionsModalTitle">
+                        <div class="collections-modal-header">
+                            <div>
+                                <span class="collections-eyebrow">COLECCIONES MICELANEASSTORE</span>
+                                <h2 id="collectionsModalTitle">Más diseños</h2>
+                                <p>Elige la colección que quieres usar para crear tu lotería.</p>
+                            </div>
+                            <button type="button" class="collections-close" id="btnCerrarColecciones" aria-label="Cerrar">×</button>
+                        </div>
+
+                        <div class="collections-grid">
+                            <article class="collection-card design-card" data-design="fiesta-mexicana">
+                                <img src="img/preview/FiestaMx/01.webp" alt="Fiesta Mexicana" loading="lazy">
+                                <div><h3>Fiesta Mexicana</h3><p>Una celebración llena de color y tradición mexicana.</p>
+                                <button type="button" class="btn-primary select-design collection-select">Elegir diseño</button></div>
+                            </article>
+                            <article class="collection-card design-card" data-design="dia-muertos">
+                                <img src="img/preview/DiaMuertos/01.webp" alt="Día de Muertos" loading="lazy">
+                                <div><h3>Día de Muertos</h3><p>Tradición, flores y color para una colección muy mexicana.</p>
+                                <button type="button" class="btn-primary select-design collection-select">Elegir diseño</button></div>
+                            </article>
+                            <article class="collection-card design-card" data-design="san-valentin">
+                                <img src="img/preview/SanValentin/01.webp" alt="San Valentín" loading="lazy">
+                                <div><h3>San Valentín</h3><p>Una colección alegre para celebrar el amor y la amistad.</p>
+                                <button type="button" class="btn-primary select-design collection-select">Elegir diseño</button></div>
+                            </article>
+                            <article class="collection-card design-card" data-design="infantil">
+                                <img src="img/preview/Infantil/01.webp" alt="Lotería Infantil" loading="lazy">
+                                <div><h3>Infantil</h3><p>Figuras tiernas y coloridas para chicos y grandes.</p>
+                                <button type="button" class="btn-primary select-design collection-select">Elegir diseño</button></div>
+                            </article>
+                            <article class="collection-card design-card" data-design="vaquera">
+                                <img src="img/preview/Vaquera/01.webp" alt="Lotería Vaquera" loading="lazy">
+                                <div><h3>Vaquera</h3><p>Una colección con botas, sombreros y espíritu del oeste.</p>
+                                <button type="button" class="btn-primary select-design collection-select">Elegir diseño</button></div>
+                            </article>
+                            <article class="collection-card design-card" data-design="dia-madres">
+                                <img src="img/preview/DiaMadres/01.webp" alt="Mamá Mexicana" loading="lazy">
+                                <div><h3>Mamá Mexicana</h3><p>Una colección especial, alegre y muy mexicana.</p>
+                                <button type="button" class="btn-primary select-design collection-select">Elegir diseño</button></div>
+                            </article>
+                            <article class="collection-card design-card" data-design="maestro">
+                                <img src="img/preview/Maestro/01.webp" alt="Día del Maestro" loading="lazy">
+                                <div><h3>Día del Maestro</h3><p>Una colección dedicada a quienes enseñan e inspiran.</p>
+                                <button type="button" class="btn-primary select-design collection-select">Elegir diseño</button></div>
+                            </article>
+                            <article class="collection-card design-card" data-design="navidad">
+                                <img src="img/preview/Navidad/01.webp" alt="Lotería de Navidad" loading="lazy">
+                                <div><h3>Navidad</h3><p>54 figuras navideñas para celebrar la temporada.</p>
+                                <button type="button" class="btn-primary select-design collection-select">Elegir diseño</button></div>
+                            </article>
+                        </div>
+                    </div>
                 </div>
 
                 <div class="creator-actions">
