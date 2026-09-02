@@ -252,30 +252,54 @@ function dibujarContain(page, img, x, y, w, h, padding = 1.5) {
 function dibujarTablaEnPanel({ page, tabla, index, formato, cartas, font, fontBold, x0, y0, w, h }) {
   const cols = formato === "5x5" ? 5 : 4;
   const rows = cols;
-  const outer = 10;
-  const titleH = 24;
-  const footerH = 17;
-  const gridX = x0 + outer;
+
+  // Márgenes compactos para aprovechar mejor el papel impreso.
+  const outer = 5;
+  const titleH = 17;
+  const footerH = 9;
+
+  const maxGridW = w - outer * 2;
+  const maxGridH = h - titleH - footerH - outer * 2;
+
+  // Las cartas originales son verticales. En presentaciones compactas
+  // (4/Carta y 8/Tabloide) el panel es proporcionalmente más ancho que
+  // una carta. Si se divide todo el ancho en celdas, pdf-lib centra cada
+  // imagen dentro de una celda demasiado ancha y aparecen franjas blancas
+  // ENTRE las figuras. Para evitarlo hacemos que la cuadrícula completa
+  // conserve la proporción real de las imágenes y centramos la cuadrícula.
+  // Así las cartas quedan prácticamente pegadas entre sí, sin deformarlas.
+  const imagenRef = cartas.get(1);
+  const proporcionCarta = imagenRef && imagenRef.height
+    ? imagenRef.width / imagenRef.height
+    : 2 / 3;
+  const proporcionGrid = proporcionCarta * (cols / rows);
+
+  let gridW = maxGridW;
+  let gridH = gridW / proporcionGrid;
+  if (gridH > maxGridH) {
+    gridH = maxGridH;
+    gridW = gridH * proporcionGrid;
+  }
+
+  const gridX = x0 + (w - gridW) / 2;
   const gridY = y0 + footerH + outer;
-  const gridW = w - outer * 2;
-  const gridH = h - titleH - footerH - outer * 2;
   const cellW = gridW / cols;
   const cellH = gridH / rows;
 
   page.drawText(`Tabla ${index + 1}`, {
     x: x0 + outer,
-    y: y0 + h - outer - 13,
-    size: 10,
+    y: y0 + h - outer - 10.5,
+    size: 9,
     font: fontBold,
     color: rgb(0.12, 0.12, 0.15)
   });
 
   const patron = NOMBRES_PATRON[tabla.tipo] || tabla.tipo;
-  const anchoPatron = font.widthOfTextAtSize(patron, 7);
+  const anchoPatron = font.widthOfTextAtSize(patron, 6.5);
   page.drawText(patron, {
     x: Math.max(x0 + outer, x0 + w - outer - anchoPatron),
-    y: y0 + h - outer - 12,
-    size: 7,
+    y: y0 + h - outer - 10,
+    size: 6.5,
     font,
     color: rgb(0.35, 0.35, 0.4)
   });
@@ -291,18 +315,21 @@ function dibujarTablaEnPanel({ page, tabla, index, formato, cartas, font, fontBo
       y,
       width: cellW,
       height: cellH,
-      borderWidth: 0.5,
+      borderWidth: 0.35,
       borderColor: rgb(0.78, 0.8, 0.84),
       color: rgb(1, 1, 1)
     });
 
-    dibujarContain(page, cartas.get(numero), x, y, cellW, cellH, 1.3);
+    // Padding mínimo: sólo evita que el borde toque físicamente la imagen.
+    // La proporción de la celda ya coincide con la carta, por lo que no se
+    // generan huecos visibles entre figuras.
+    dibujarContain(page, cartas.get(numero), x, y, cellW, cellH, 0.25);
   });
 
   page.drawText("MicelaneasStore", {
     x: x0 + outer,
-    y: y0 + 7,
-    size: 6.5,
+    y: y0 + 3.5,
+    size: 5.5,
     font,
     color: rgb(0.48, 0.48, 0.54)
   });
