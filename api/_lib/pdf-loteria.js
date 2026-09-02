@@ -108,7 +108,29 @@ function generarSecuenciaComodines(cantidad, rng) {
   return salida;
 }
 
-function generarTabla({ formato, tipo, rng, firmas, comodinForzado = null }) {
+// Para las tablas SIN dobles usamos una posición de control (comodín virtual):
+// 4x4 -> posición 1
+// 5x5 -> posición 13 (centro)
+// Si el pedido tiene menos de 54 tablas, las figuras de esa posición se eligen
+// al azar sin repetirse. Si el pedido tiene 54 o más, se usan consecutivamente
+// 1..54 y se reinicia el ciclo.
+function generarSecuenciaSinDobles(cantidadSinDobles, totalPedido, rng) {
+  if (cantidadSinDobles <= 0) return [];
+
+  const cartas = Array.from({ length: 54 }, (_, i) => i + 1);
+
+  if (Number(totalPedido) < 54) {
+    // Como cantidadSinDobles <= totalPedido < 54, basta un solo ciclo mezclado
+    // para garantizar que no se repita ninguna figura controlada.
+    return mezclar(cartas, rng).slice(0, cantidadSinDobles);
+  }
+
+  // En pedidos de 54 o más tablas, la distribución es totalmente equilibrada
+  // y consecutiva: 1,2,...,54,1,2,...
+  return Array.from({ length: cantidadSinDobles }, (_, i) => (i % 54) + 1);
+}
+
+function generarTabla({ formato, tipo, rng, firmas, comodinForzado = null, virtualForzado = null }) {
   const total = formato === "5x5" ? 25 : 16;
   const dobles = PATRONES[formato]?.[tipo] || [];
   const cartas = Array.from({ length: 54 }, (_, i) => i + 1);
@@ -131,8 +153,21 @@ function generarTabla({ formato, tipo, rng, firmas, comodinForzado = null }) {
         if (celdas[i] == null) celdas[i] = disponibles[p++];
       }
     } else {
-      const disponibles = mezclar(cartas, rng).slice(0, total);
-      for (let i = 0; i < total; i++) celdas[i] = disponibles[i];
+      // Sin dobles: fijamos una sola posición para equilibrar la distribución
+      // entre tablas, sin repetir la figura dentro de la misma tabla.
+      if (virtualForzado != null) {
+        const posicionControl = formato === "5x5" ? 13 : 1;
+        celdas[posicionControl - 1] = virtualForzado;
+
+        const disponibles = mezclar(cartas.filter(n => n !== virtualForzado), rng);
+        let p = 0;
+        for (let i = 0; i < total; i++) {
+          if (celdas[i] == null) celdas[i] = disponibles[p++];
+        }
+      } else {
+        const disponibles = mezclar(cartas, rng).slice(0, total);
+        for (let i = 0; i < total; i++) celdas[i] = disponibles[i];
+      }
     }
 
     const firma = celdas.join("-");
@@ -154,25 +189,36 @@ function generarTablas(payload) {
   const seedBase = `${payload.pid}|${payload.d}|${payload.f}|${payload.q}`;
   const rng = crearRng(seedBase);
   const rngComodines = crearRng(`${seedBase}|comodines-v2`);
+  const rngSinDobles = crearRng(`${seedBase}|sin-dobles-v1`);
   const firmas = new Set();
 
   const cantidadConDobles = tipos.filter(tipo =>
     (PATRONES[payload.f]?.[tipo] || []).length === 2
   ).length;
+  const cantidadSinDobles = tipos.length - cantidadConDobles;
 
   const comodines = generarSecuenciaComodines(cantidadConDobles, rngComodines);
+  const virtualesSinDobles = generarSecuenciaSinDobles(
+    cantidadSinDobles,
+    Number(payload.q),
+    rngSinDobles
+  );
+
   let indiceComodin = 0;
+  let indiceSinDobles = 0;
 
   return tipos.map(tipo => {
     const tieneDobles = (PATRONES[payload.f]?.[tipo] || []).length === 2;
     const comodinForzado = tieneDobles ? comodines[indiceComodin++] : null;
+    const virtualForzado = !tieneDobles ? virtualesSinDobles[indiceSinDobles++] : null;
 
     return generarTabla({
       formato: payload.f,
       tipo,
       rng,
       firmas,
-      comodinForzado
+      comodinForzado,
+      virtualForzado
     });
   });
 }
