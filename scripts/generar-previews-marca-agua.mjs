@@ -30,12 +30,13 @@ function svgMarcaAgua() {
     <g transform="rotate(-32 ${ANCHO / 2} ${ALTO / 2})">
       <text x="50%" y="47%" text-anchor="middle" dominant-baseline="middle"
         font-family="Arial, Helvetica, sans-serif" font-size="48" font-weight="700"
-        letter-spacing="2" fill="rgba(255,255,255,0.38)"
-        stroke="rgba(0,0,0,0.18)" stroke-width="1.5">${MARCA}</text>
+        letter-spacing="2" fill="rgba(190,30,30,0.90)"
+        stroke="rgba(255,255,255,0.65)" stroke-width="2.5">${MARCA}</text>
+
       <text x="50%" y="58%" text-anchor="middle" dominant-baseline="middle"
         font-family="Arial, Helvetica, sans-serif" font-size="48" font-weight="700"
-        letter-spacing="2" fill="rgba(255,255,255,0.38)"
-        stroke="rgba(0,0,0,0.18)" stroke-width="1.5">${MARCA}</text>
+        letter-spacing="2" fill="rgba(190,30,30,0.90)"
+        stroke="rgba(255,255,255,0.65)" stroke-width="2.5">${MARCA}</text>
     </g>
   </svg>`);
 }
