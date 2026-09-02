@@ -85,7 +85,30 @@ function expandirDistribucion(distribucion) {
   return salida;
 }
 
-function generarTabla({ formato, tipo, rng, firmas }) {
+function generarSecuenciaComodines(cantidad, rng) {
+  const cartas = Array.from({ length: 54 }, (_, i) => i + 1);
+  const salida = [];
+  let ultimo = null;
+
+  while (salida.length < cantidad) {
+    let ciclo = mezclar(cartas, rng);
+
+    // Evita que el primer comodín de un ciclo sea igual al último
+    // del ciclo anterior. Dentro de cada ciclo las 54 figuras son únicas.
+    if (ultimo != null && ciclo[0] === ultimo && ciclo.length > 1) {
+      [ciclo[0], ciclo[1]] = [ciclo[1], ciclo[0]];
+    }
+
+    const faltan = cantidad - salida.length;
+    const tramo = ciclo.slice(0, Math.min(54, faltan));
+    salida.push(...tramo);
+    ultimo = tramo[tramo.length - 1];
+  }
+
+  return salida;
+}
+
+function generarTabla({ formato, tipo, rng, firmas, comodinForzado = null }) {
   const total = formato === "5x5" ? 25 : 16;
   const dobles = PATRONES[formato]?.[tipo] || [];
   const cartas = Array.from({ length: 54 }, (_, i) => i + 1);
@@ -94,7 +117,11 @@ function generarTabla({ formato, tipo, rng, firmas }) {
     const celdas = Array(total).fill(null);
 
     if (dobles.length === 2) {
-      const comodin = cartas[Math.floor(rng() * cartas.length)];
+      // Conservamos una lectura del RNG de tablas para mantener estable
+      // la secuencia pseudoaleatoria del resto de la generación.
+      const aleatorioOriginal = rng();
+      const comodin = comodinForzado ?? cartas[Math.floor(aleatorioOriginal * cartas.length)];
+
       celdas[dobles[0] - 1] = comodin;
       celdas[dobles[1] - 1] = comodin;
 
@@ -124,14 +151,30 @@ function generarTablas(payload) {
     throw new Error("La distribución comprada no coincide con la cantidad de tablas.");
   }
 
-  const rng = crearRng(`${payload.pid}|${payload.d}|${payload.f}|${payload.q}`);
+  const seedBase = `${payload.pid}|${payload.d}|${payload.f}|${payload.q}`;
+  const rng = crearRng(seedBase);
+  const rngComodines = crearRng(`${seedBase}|comodines-v2`);
   const firmas = new Set();
-  return tipos.map(tipo => generarTabla({
-    formato: payload.f,
-    tipo,
-    rng,
-    firmas
-  }));
+
+  const cantidadConDobles = tipos.filter(tipo =>
+    (PATRONES[payload.f]?.[tipo] || []).length === 2
+  ).length;
+
+  const comodines = generarSecuenciaComodines(cantidadConDobles, rngComodines);
+  let indiceComodin = 0;
+
+  return tipos.map(tipo => {
+    const tieneDobles = (PATRONES[payload.f]?.[tipo] || []).length === 2;
+    const comodinForzado = tieneDobles ? comodines[indiceComodin++] : null;
+
+    return generarTabla({
+      formato: payload.f,
+      tipo,
+      rng,
+      firmas,
+      comodinForzado
+    });
+  });
 }
 
 async function cargarCartas(pdf, diseno) {
