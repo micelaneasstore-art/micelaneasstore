@@ -462,6 +462,33 @@ HERO
 
 
 /* ==================================================
+   CONFIRMACIÓN DE COLECCIÓN SELECCIONADA
+================================================== */
+
+.collection-selection-notice{
+    display:flex;
+    flex-direction:column;
+    gap:4px;
+    margin-top:26px;
+    padding:16px 18px;
+    border:1px solid rgba(198,40,40,.22);
+    border-radius:14px;
+    background:#fff7f7;
+    color:var(--color-text);
+    box-shadow:0 8px 24px rgba(198,40,40,.08);
+}
+
+.collection-selection-notice strong{
+    color:var(--color-primary);
+    font-size:1rem;
+}
+
+.collection-selection-notice span{
+    font-size:.92rem;
+    line-height:1.45;
+}
+
+/* ==================================================
    ACCIONES
 ================================================== */
 

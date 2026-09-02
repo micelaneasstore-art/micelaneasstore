@@ -26,8 +26,37 @@ designButtons.forEach(button => {
         }
 
         if (card.classList.contains("collection-card")) {
+            const nombreColeccion =
+                card.querySelector("h3")?.textContent?.trim() || diseñoSeleccionado;
+
             cerrarColecciones();
-            document.getElementById("moreDesignsCard")?.classList.add("selected");
+
+            const moreDesignsCard = document.getElementById("moreDesignsCard");
+            moreDesignsCard?.classList.add("selected");
+
+            // Confirmación visual para que el cliente sepa que la colección sí quedó elegida.
+            let aviso = document.getElementById("collectionSelectionNotice");
+            if (!aviso) {
+                aviso = document.createElement("div");
+                aviso.id = "collectionSelectionNotice";
+                aviso.className = "collection-selection-notice";
+
+                const creatorActions = document.querySelector(".creator-actions");
+                creatorActions?.parentNode?.insertBefore(aviso, creatorActions);
+            }
+
+            aviso.innerHTML = `
+                <strong>✓ Colección seleccionada: ${nombreColeccion}</strong>
+                <span>Ya puedes continuar a la configuración de tus tablas.</span>
+            `;
+
+            // Lleva al cliente directamente a la confirmación y al botón Continuar.
+            requestAnimationFrame(() => {
+                aviso.scrollIntoView({
+                    behavior: "smooth",
+                    block: "center"
+                });
+            });
         }
     });
 });
