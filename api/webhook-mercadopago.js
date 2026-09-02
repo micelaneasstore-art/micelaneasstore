@@ -1,6 +1,7 @@
 const {
     verificarReferencia
 } = require("./_lib/order");
+const { enviarCorreoPedido } = require("./_lib/email-pedido");
 
 /**
  * Webhook de Mercado Pago
@@ -129,6 +130,25 @@ async function procesarPago(paymentId, accessToken, origen) {
             total: pedido.total
         } : null
     });
+
+    if (correcto) {
+        try {
+            await enviarCorreoPedido({ payment, pedido });
+        } catch (error) {
+            console.error("No se pudo enviar correo de descarga", {
+                origen,
+                payment_id: payment.id,
+                message: error.message,
+                status: error.status ?? null,
+                resend: error.data ?? null
+            });
+
+            // Si el servicio de correo está configurado pero falla, dejamos
+            // que Mercado Pago reintente el webhook. Resend usa una clave de
+            // idempotencia por payment_id para evitar correos duplicados.
+            throw error;
+        }
+    }
 
     return {
         payment,

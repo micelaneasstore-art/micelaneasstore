@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="es-MX">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Tus descargas | MicelaneasStore</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/payment-result.css">
+</head>
+<body>
+<div class="result-wrap">
+  <main class="result-card">
+    <span class="result-badge">Compra digital</span>
+    <h1 id="tituloEstado">Tus archivos están listos</h1>
+    <p id="textoEstado">Este enlace de correo es válido durante 7 días a partir de la confirmación del pago.</p>
+
+    <div id="resumenPago" class="result-summary" hidden></div>
+
+    <section id="descargas" class="download-section" hidden>
+      <h2>Tus archivos</h2>
+      <p class="download-help">Pulsa cada archivo para generarlo y guardarlo en tu dispositivo.</p>
+
+      <div class="download-grid">
+        <a id="btnGuia" class="download-card" href="#">
+          <span class="download-icon">📘</span>
+          <span><strong>Guía y patrones</strong><small>Instrucciones 4×4 y 5×5</small></span>
+          <b>Descargar</b>
+        </a>
+
+        <button id="btnTablas" class="download-card" type="button">
+          <span class="download-icon">📄</span>
+          <span><strong>Tablas de lotería</strong><small>PDF comprado</small></span>
+          <b>Generar PDF</b>
+        </button>
+
+        <button id="btnMazo" class="download-card" type="button" hidden>
+          <span class="download-icon">🃏</span>
+          <span><strong>Mazo de 54 cartas</strong><small>PDF imprimible</small></span>
+          <b>Generar PDF</b>
+        </button>
+      </div>
+
+      <p class="download-notice" id="mensajeGenerador">Los archivos se generan con un enlace temporal protegido.</p>
+    </section>
+
+    <div class="result-actions">
+      <a class="result-btn" href="crear.html">Crear otra lotería</a>
+    </div>
+  </main>
+</div>
+
+<script>
+(function () {
+    const params = new URLSearchParams(window.location.search);
+    const token = params.get("token");
+    const titulo = document.getElementById("tituloEstado");
+    const texto = document.getElementById("textoEstado");
+    const resumen = document.getElementById("resumenPago");
+    const descargas = document.getElementById("descargas");
+    const btnGuia = document.getElementById("btnGuia");
+    const btnTablas = document.getElementById("btnTablas");
+    const btnMazo = document.getElementById("btnMazo");
+    const mensajeGenerador = document.getElementById("mensajeGenerador");
+
+    function decodificarToken(valor) {
+        try {
+            const encoded = String(valor || "").split(".")[0];
+            if (!encoded) return null;
+            const base64 = encoded.replace(/-/g, "+").replace(/_/g, "/") + "===".slice((encoded.length + 3) % 4);
+            const textoJson = decodeURIComponent(Array.from(atob(base64)).map(c => "%" + c.charCodeAt(0).toString(16).padStart(2, "0")).join(""));
+            return JSON.parse(textoJson);
+        } catch {
+            return null;
+        }
+    }
+
+    if (!token) {
+        titulo.textContent = "Enlace de descarga inválido";
+        titulo.className = "status-error";
+        texto.textContent = "Abre nuevamente el enlace que recibiste en tu correo.";
+        return;
+    }
+
+    const p = decodificarToken(token);
+    if (!p || !p.exp || Date.now() > Number(p.exp)) {
+        titulo.textContent = "El enlace de descarga expiró";
+        titulo.className = "status-error";
+        texto.textContent = "El enlace enviado por correo estuvo disponible durante 7 días.";
+        return;
+    }
+
+    const disenos = {
+        tradicional:"Tradicional", animada:"Animada", gorditos:"Gorditos",
+        "fiesta-mexicana":"Fiesta Mexicana", "dia-muertos":"Día de Muertos",
+        "san-valentin":"San Valentín", infantil:"Infantil", vaquera:"Vaquera",
+        "dia-madres":"Día de las Madres", maestro:"Maestro", navidad:"Navidad"
+    };
+    const presentaciones = {
+        "carta-2-horizontal":"2 por hoja · Carta horizontal",
+        "carta-4-vertical":"4 por hoja · Carta vertical",
+        "tabloide-4-vertical":"4 por hoja · Tabloide vertical",
+        "tabloide-8-horizontal":"8 por hoja · Tabloide horizontal"
+    };
+
+    titulo.textContent = "Tus archivos están listos";
+    titulo.className = "status-ok";
+    resumen.hidden = false;
+    resumen.innerHTML = `
+      <div class="result-row"><span>Tablas</span><strong>${p.q}</strong></div>
+      <div class="result-row"><span>Diseño</span><strong>${disenos[p.d] || p.d}</strong></div>
+      <div class="result-row"><span>Formato</span><strong>${String(p.f || "").toUpperCase()}</strong></div>
+      <div class="result-row"><span>Impresión</span><strong>${presentaciones[p.p] || "Presentación seleccionada"}</strong></div>
+      <div class="result-row"><span>Mazo</span><strong>${p.m === 1 ? "Sí" : "No"}</strong></div>
+    `;
+    descargas.hidden = false;
+    btnGuia.href = `/api/descargar-guia?token=${encodeURIComponent(token)}`;
+    if (p.m === 1) btnMazo.hidden = false;
+
+    const generar = async (boton, endpoint, textoInicial) => {
+        if (boton.dataset.generando === "1") return;
+        boton.dataset.generando = "1";
+        boton.disabled = true;
+        const etiqueta = boton.querySelector("b");
+        const anterior = etiqueta.textContent;
+        etiqueta.textContent = "Generando…";
+        mensajeGenerador.textContent = textoInicial;
+
+        try {
+            const r = await fetch(`${endpoint}?token=${encodeURIComponent(token)}`);
+            const data = await r.json();
+            if (!r.ok || !data.url) throw new Error(data.error || "No se pudo generar el archivo.");
+
+            const archivo = await fetch(data.url);
+            if (!archivo.ok) throw new Error("El PDF se generó, pero no se pudo iniciar la descarga.");
+            const blob = await archivo.blob();
+            const urlLocal = URL.createObjectURL(blob);
+            const enlace = document.createElement("a");
+            enlace.href = urlLocal;
+            enlace.download = data.nombre || "MicelaneasStore.pdf";
+            enlace.style.display = "none";
+            document.body.appendChild(enlace);
+            enlace.click();
+            enlace.remove();
+            setTimeout(() => URL.revokeObjectURL(urlLocal), 30000);
+
+            etiqueta.textContent = "Descargar";
+            mensajeGenerador.textContent = "Archivo listo y descargado. Guárdalo en tu dispositivo.";
+        } catch (error) {
+            etiqueta.textContent = anterior;
+            mensajeGenerador.textContent = error.message || "No se pudo generar el archivo.";
+        } finally {
+            boton.disabled = false;
+            boton.dataset.generando = "0";
+        }
+    };
+
+    btnTablas.addEventListener("click", () => generar(btnTablas, "/api/descargar-tablas", `Generando ${p.q} tablas ${String(p.f).toUpperCase()}…`));
+    btnMazo.addEventListener("click", () => generar(btnMazo, "/api/descargar-mazo", "Generando el mazo de 54 cartas…"));
+})();
+</script>
+</body>
+</html>
