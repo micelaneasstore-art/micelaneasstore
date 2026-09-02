@@ -23,6 +23,12 @@ const DISENOS = new Set([
     "dia-madres", "maestro", "navidad"
 ]);
 const FORMATOS = new Set(["4x4", "5x5"]);
+const PRESENTACIONES = new Set([
+    "carta-2-horizontal",
+    "carta-4-vertical",
+    "tabloide-4-vertical",
+    "tabloide-8-horizontal"
+]);
 
 const DISTRIBUCIONES = [
     "sin-dobles",
@@ -70,6 +76,20 @@ const FORMATO_CODE = {
 const CODE_FORMATO = {
     "4": "4x4",
     "5": "5x5"
+};
+
+const PRESENTACION_CODE = {
+    "carta-2-horizontal": "a",
+    "carta-4-vertical": "b",
+    "tabloide-4-vertical": "c",
+    "tabloide-8-horizontal": "d"
+};
+
+const CODE_PRESENTACION = {
+    a: "carta-2-horizontal",
+    b: "carta-4-vertical",
+    c: "tabloide-4-vertical",
+    d: "tabloide-8-horizontal"
 };
 
 function normalizarDistribucion(valor, cantidad) {
@@ -134,6 +154,9 @@ function normalizarPedido(input = {}) {
     );
 
     const formato = FORMATOS.has(input.formato) ? input.formato : "4x4";
+    const presentacion = PRESENTACIONES.has(input.presentacion)
+        ? input.presentacion
+        : "carta-2-horizontal";
     const diseno = DISENOS.has(input.diseno) ? input.diseno : "tradicional";
     const agregarMazo = Boolean(input.agregarMazo);
     const distribucion = normalizarDistribucion(input.distribucion, cantidad);
@@ -145,6 +168,7 @@ function normalizarPedido(input = {}) {
     return {
         cantidad,
         formato,
+        presentacion,
         diseno,
         agregarMazo,
         distribucion,
@@ -181,12 +205,14 @@ function secret() {
   Esto conserva toda la información firmada sin meter un JSON/base64 largo.
 */
 function firmarPedido(pedido) {
+    // v2 agrega la presentación de impresión sin cambiar la lógica de tablas.
     const payload = [
-        "v1",
+        "v2",
         Number(pedido.cantidad).toString(36),
         FORMATO_CODE[pedido.formato],
         DISENO_CODE[pedido.diseno],
         pedido.agregarMazo ? "1" : "0",
+        PRESENTACION_CODE[pedido.presentacion],
         codificarDistribucion(pedido.distribucion),
         Date.now().toString(36),
         crypto.randomBytes(4).toString("base64url")
@@ -203,24 +229,30 @@ function firmarPedido(pedido) {
 
 function verificarReferenciaCompacta(reference) {
     const partes = String(reference || "").split("|");
+    const version = partes[0];
 
-    if (partes.length !== 9 || partes[0] !== "v1") {
+    if (version !== "v1" && version !== "v2") {
         throw new Error("Formato de referencia compacta inválido.");
     }
 
-    const [
-        version,
-        cantidadCode,
-        formatoCode,
-        disenoCode,
-        mazoCode,
-        distribucionCode,
-        timestampCode,
-        nonce,
-        firma
-    ] = partes;
+    const esperadas = version === "v2" ? 10 : 9;
+    if (partes.length !== esperadas) {
+        throw new Error("Formato de referencia compacta inválido.");
+    }
 
-    const payload = partes.slice(0, 8).join("|");
+    let cantidadCode, formatoCode, disenoCode, mazoCode, presentacionCode;
+    let distribucionCode, firma, payload;
+
+    if (version === "v2") {
+        [, cantidadCode, formatoCode, disenoCode, mazoCode, presentacionCode, distribucionCode] = partes;
+        firma = partes[9];
+        payload = partes.slice(0, 9).join("|");
+    } else {
+        [, cantidadCode, formatoCode, disenoCode, mazoCode, distribucionCode] = partes;
+        firma = partes[8];
+        payload = partes.slice(0, 8).join("|");
+        presentacionCode = "a";
+    }
 
     const esperada = crypto
         .createHmac("sha256", secret())
@@ -238,6 +270,7 @@ function verificarReferenciaCompacta(reference) {
     const cantidad = parseInt(cantidadCode, 36);
     const formato = CODE_FORMATO[formatoCode];
     const diseno = CODE_DISENO[disenoCode];
+    const presentacion = CODE_PRESENTACION[presentacionCode] || "carta-2-horizontal";
     const distribucion = decodificarDistribucion(distribucionCode);
 
     if (!Number.isFinite(cantidad) || cantidad < 1) {
@@ -247,6 +280,7 @@ function verificarReferenciaCompacta(reference) {
     return normalizarPedido({
         cantidad,
         formato,
+        presentacion,
         diseno,
         agregarMazo: mazoCode === "1",
         distribucion
@@ -284,6 +318,7 @@ function verificarReferenciaLegacy(reference) {
     return normalizarPedido({
         cantidad: payload.q,
         formato: payload.f,
+        presentacion: payload.p || "carta-2-horizontal",
         diseno: payload.d,
         agregarMazo: payload.m === 1,
         distribucion: payload.r
@@ -291,7 +326,7 @@ function verificarReferenciaLegacy(reference) {
 }
 
 function verificarReferencia(reference) {
-    if (String(reference || "").startsWith("v1|")) {
+    if (/^v[12]\|/.test(String(reference || ""))) {
         return verificarReferenciaCompacta(reference);
     }
 

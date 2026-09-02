@@ -308,6 +308,13 @@ function dibujarTablaEnPanel({ page, tabla, index, formato, cartas, font, fontBo
   });
 }
 
+const PRESENTACIONES_PDF = {
+  "carta-2-horizontal": { pageW: 792, pageH: 612, cols: 2, rows: 1 },
+  "carta-4-vertical": { pageW: 612, pageH: 792, cols: 2, rows: 2 },
+  "tabloide-4-vertical": { pageW: 792, pageH: 1224, cols: 2, rows: 2 },
+  "tabloide-8-horizontal": { pageW: 1224, pageH: 792, cols: 4, rows: 2 }
+};
+
 async function crearPdfTablas(payload) {
   const pdf = await PDFDocument.create();
   const tablas = generarTablas(payload);
@@ -315,53 +322,66 @@ async function crearPdfTablas(payload) {
   const font = await pdf.embedFont(StandardFonts.Helvetica);
   const fontBold = await pdf.embedFont(StandardFonts.HelveticaBold);
 
-  // Carta horizontal: dos tablas tamaño aproximado media carta (14 x 21.6 cm).
-  const pageW = 792;
-  const pageH = 612;
-  const panelW = pageW / 2;
+  // La presentación sólo cambia el acomodo físico del PDF.
+  // No forma parte de la semilla de generarTablas(), por lo que la distribución
+  // de figuras/comodines permanece exactamente igual para el mismo pedido.
+  const presentacion = payload.p || payload.presentacion || "carta-2-horizontal";
+  const config = PRESENTACIONES_PDF[presentacion] || PRESENTACIONES_PDF["carta-2-horizontal"];
+  const { pageW, pageH, cols, rows } = config;
+  const porHoja = cols * rows;
+  const panelW = pageW / cols;
+  const panelH = pageH / rows;
 
-  for (let i = 0; i < tablas.length; i += 2) {
+  for (let inicio = 0; inicio < tablas.length; inicio += porHoja) {
     const page = pdf.addPage([pageW, pageH]);
 
-    dibujarTablaEnPanel({
-      page,
-      tabla: tablas[i],
-      index: i,
-      formato: payload.f,
-      cartas,
-      font,
-      fontBold,
-      x0: 0,
-      y0: 0,
-      w: panelW,
-      h: pageH
-    });
+    for (let k = 0; k < porHoja; k++) {
+      const indice = inicio + k;
+      if (!tablas[indice]) break;
 
-    if (tablas[i + 1]) {
+      const col = k % cols;
+      const row = Math.floor(k / cols);
+      const x0 = col * panelW;
+      const y0 = pageH - (row + 1) * panelH;
+
       dibujarTablaEnPanel({
         page,
-        tabla: tablas[i + 1],
-        index: i + 1,
+        tabla: tablas[indice],
+        index: indice,
         formato: payload.f,
         cartas,
         font,
         fontBold,
-        x0: panelW,
-        y0: 0,
+        x0,
+        y0,
         w: panelW,
-        h: pageH
+        h: panelH
       });
+    }
 
+    // Líneas guía entre paneles para facilitar el corte.
+    for (let c = 1; c < cols; c++) {
+      const x = c * panelW;
       page.drawLine({
-        start: { x: panelW, y: 10 },
-        end: { x: panelW, y: pageH - 10 },
+        start: { x, y: 10 },
+        end: { x, y: pageH - 10 },
+        thickness: 0.45,
+        color: rgb(0.72, 0.72, 0.76)
+      });
+    }
+
+    for (let r = 1; r < rows; r++) {
+      const y = pageH - r * panelH;
+      page.drawLine({
+        start: { x: 10, y },
+        end: { x: pageW - 10, y },
         thickness: 0.45,
         color: rgb(0.72, 0.72, 0.76)
       });
     }
   }
 
-  pdf.setTitle(`MicelaneasStore - ${payload.q} tablas ${payload.f}`);
+  pdf.setTitle(`MicelaneasStore - ${payload.q} tablas ${payload.f} - ${presentacion}`);
   pdf.setAuthor("MicelaneasStore");
   pdf.setProducer("MicelaneasStore");
 

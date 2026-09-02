@@ -14,6 +14,7 @@ function crearTokenDescarga({ paymentId, pedido, minutos = 15 }) {
         exp: Date.now() + minutos * 60 * 1000,
         q: pedido.cantidad,
         f: pedido.formato,
+        p: pedido.presentacion,
         d: pedido.diseno,
         m: pedido.agregarMazo ? 1 : 0,
         r: pedido.distribucion

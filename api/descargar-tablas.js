@@ -12,7 +12,7 @@ module.exports = async function handler(req, res) {
     const payload = verificarTokenDescarga(String(req.query.token || ""));
     const pdf = await crearPdfTablas(payload);
     const pathname = nombreSeguro(
-      `pedidos/${payload.pid}/tablas-${payload.d}-${payload.f}-${payload.q}.pdf`
+      `pedidos/${payload.pid}/tablas-${payload.d}-${payload.f}-${payload.p || "carta-2-horizontal"}-${payload.q}.pdf`
     );
 
     const { presignedUrl, validUntil } = await guardarYFirmar({
@@ -25,6 +25,7 @@ module.exports = async function handler(req, res) {
       payment_id: payload.pid,
       cantidad: payload.q,
       formato: payload.f,
+      presentacion: payload.p || "carta-2-horizontal",
       diseno: payload.d,
       bytes: pdf.length,
       pathname
@@ -34,7 +35,7 @@ module.exports = async function handler(req, res) {
       listo: true,
       url: presignedUrl,
       expira: validUntil,
-      nombre: `MicelaneasStore-${payload.q}-tablas-${payload.f}.pdf`
+      nombre: `MicelaneasStore-${payload.q}-tablas-${payload.f}-${payload.p || "carta-2-horizontal"}.pdf`
     });
   } catch (error) {
     console.error("Error generando tablas", error);

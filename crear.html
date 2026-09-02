@@ -502,6 +502,43 @@
                         </div>
 
 
+                        <!-- PRESENTACIÓN DE IMPRESIÓN -->
+
+                        <div class="config-section">
+
+                            <h3>Presentación de impresión</h3>
+
+                            <p class="config-help">
+                                Elige cómo quieres acomodar las tablas dentro del PDF. Esto no cambia la distribución de figuras.
+                            </p>
+
+                            <div class="config-options-grid print-layout-options">
+
+                                <button type="button" class="config-option active" data-print-layout="carta-2-horizontal">
+                                    <strong>2 por hoja</strong>
+                                    <span>Carta horizontal</span>
+                                </button>
+
+                                <button type="button" class="config-option" data-print-layout="carta-4-vertical">
+                                    <strong>4 por hoja</strong>
+                                    <span>Carta vertical</span>
+                                </button>
+
+                                <button type="button" class="config-option" data-print-layout="tabloide-4-vertical">
+                                    <strong>4 por hoja</strong>
+                                    <span>Tabloide vertical</span>
+                                </button>
+
+                                <button type="button" class="config-option" data-print-layout="tabloide-8-horizontal">
+                                    <strong>8 por hoja</strong>
+                                    <span>Tabloide horizontal</span>
+                                </button>
+
+                            </div>
+
+                        </div>
+
+
                         <!-- DISTRIBUCIÓN DE TABLAS -->
 
                         <div class="config-section" id="distribucionTablas">
@@ -732,6 +769,11 @@
                             </p>
 
                             <p>
+                                Impresión:
+                                <strong id="resumenPresentacion">2 por hoja · Carta horizontal</strong>
+                            </p>
+
+                            <p>
                                 Distribución:
                                 <strong id="resumenModalidad">Pendiente</strong>
                             </p>
@@ -815,6 +857,11 @@
                         <div class="final-summary-row">
                             <span>Formato</span>
                             <strong id="previewResumenFormato">—</strong>
+                        </div>
+
+                        <div class="final-summary-row">
+                            <span>Impresión</span>
+                            <strong id="previewResumenPresentacion">—</strong>
                         </div>
 
                         <div class="final-summary-row">

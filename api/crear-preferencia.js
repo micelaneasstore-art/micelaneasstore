@@ -49,11 +49,18 @@ module.exports = async function handler(req, res) {
             navidad: "Lotería de Navidad"
         };
 
+        const nombresPresentacion = {
+            "carta-2-horizontal": "2 por hoja · Carta horizontal",
+            "carta-4-vertical": "4 por hoja · Carta vertical",
+            "tabloide-4-vertical": "4 por hoja · Tabloide vertical",
+            "tabloide-8-horizontal": "8 por hoja · Tabloide horizontal"
+        };
+
         const items = [
             {
                 id: "tablas-loteria",
                 title: `${pedido.cantidad} tablas - ${nombres[pedido.diseno]}`,
-                description: `Formato ${pedido.formato.toUpperCase()} · Producto digital`,
+                description: `Formato ${pedido.formato.toUpperCase()} · ${nombresPresentacion[pedido.presentacion]} · Producto digital`,
                 quantity: 1,
                 currency_id: "MXN",
                 unit_price: pedido.subtotal

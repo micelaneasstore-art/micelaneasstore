@@ -122,6 +122,7 @@ async function procesarPago(paymentId, accessToken, origen) {
         pedido: pedido ? {
             cantidad: pedido.cantidad,
             formato: pedido.formato,
+            presentacion: pedido.presentacion,
             diseno: pedido.diseno,
             mazo: pedido.agregarMazo,
             distribucion: pedido.distribucion,

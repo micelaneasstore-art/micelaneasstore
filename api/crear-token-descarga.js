@@ -61,6 +61,7 @@ module.exports = async function handler(req, res) {
             pedido: {
                 cantidad: pedido.cantidad,
                 formato: pedido.formato,
+                presentacion: pedido.presentacion,
                 diseno: pedido.diseno,
                 agregarMazo: pedido.agregarMazo,
                 distribucion: pedido.distribucion,

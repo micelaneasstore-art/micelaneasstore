@@ -80,6 +80,7 @@ const generatedTablePreview = document.getElementById("generatedTablePreview");
 const previewTipoTabla = document.getElementById("previewTipoTabla");
 const previewResumenDiseno = document.getElementById("previewResumenDiseno");
 const previewResumenFormato = document.getElementById("previewResumenFormato");
+const previewResumenPresentacion = document.getElementById("previewResumenPresentacion");
 const previewResumenCantidad = document.getElementById("previewResumenCantidad");
 const previewResumenDistribucion = document.getElementById("previewResumenDistribucion");
 const previewDesglose = document.getElementById("previewDesglose");
@@ -103,6 +104,7 @@ const btnMenos = document.getElementById("btnMenos");
 const resumenDiseno = document.getElementById("resumenDiseno");
 const resumenCantidad = document.getElementById("resumenCantidad");
 const resumenFormato = document.getElementById("resumenFormato");
+const resumenPresentacion = document.getElementById("resumenPresentacion");
 const resumenModalidad = document.getElementById("resumenModalidad");
 
 const tablePreview = document.getElementById("tablePreview");
@@ -133,12 +135,20 @@ const contadorPresentaciones =
     document.getElementById("contadorPresentaciones");
 
 let formatoSeleccionado = "4x4";
+let presentacionSeleccionada = "carta-2-horizontal";
 let modoDistribucion = "manual";
 
 /* ==================================================
    PATRONES DISPONIBLES POR FORMATO
    Las posiciones se expresan como las cuenta el cliente: desde 1.
 ================================================== */
+
+const nombresPresentacionImpresion = {
+    "carta-2-horizontal": "2 por hoja · Carta horizontal",
+    "carta-4-vertical": "4 por hoja · Carta vertical",
+    "tabloide-4-vertical": "4 por hoja · Tabloide vertical",
+    "tabloide-8-horizontal": "8 por hoja · Tabloide horizontal"
+};
 
 const patronesPorFormato = {
     "4x4": {
@@ -339,7 +349,7 @@ document.querySelectorAll("[data-format]").forEach(button => {
         formatoSeleccionado = button.dataset.format;
 
         resumenFormato.textContent = formatoSeleccionado.toUpperCase();
-        crearVistaTabla(formatoSeleccionado);
+crearVistaTabla(formatoSeleccionado);
 
         actualizarTarjetasPorFormato();
 
@@ -365,6 +375,31 @@ document.querySelectorAll("[data-format]").forEach(button => {
     });
 });
 
+
+/* ==================================================
+   PRESENTACIÓN DE IMPRESIÓN
+================================================== */
+
+document.querySelectorAll("[data-print-layout]").forEach(button => {
+    button.addEventListener("click", () => {
+        document.querySelectorAll("[data-print-layout]").forEach(item => {
+            item.classList.remove("active");
+        });
+
+        button.classList.add("active");
+        presentacionSeleccionada = button.dataset.printLayout || "carta-2-horizontal";
+
+        if (resumenPresentacion) {
+            resumenPresentacion.textContent =
+                nombresPresentacionImpresion[presentacionSeleccionada];
+        }
+
+        sessionStorage.setItem(
+            "micelaneasstore_presentacion",
+            presentacionSeleccionada
+        );
+    });
+});
 
 /* ==================================================
    GENERAR ESQUEMA 4x4 / 5x5
@@ -945,7 +980,7 @@ function actualizarResumenPago() {
 
     if (pagoCantidadTitulo) pagoCantidadTitulo.textContent = `${cantidad} tablas de lotería`;
     if (pagoDetalleTablas) {
-        pagoDetalleTablas.textContent = `${resumenDiseno?.textContent || "Lotería"} · ${formatoSeleccionado.toUpperCase()}`;
+        pagoDetalleTablas.textContent = `${resumenDiseno?.textContent || "Lotería"} · ${formatoSeleccionado.toUpperCase()} · ${nombresPresentacionImpresion[presentacionSeleccionada]}`;
     }
     if (pagoPrecioTablas) pagoPrecioTablas.textContent = dinero(precioTablas);
     if (pagoResumenTablas) pagoResumenTablas.textContent = dinero(precioTablas);
@@ -1096,6 +1131,11 @@ function actualizarResumenPaso3() {
         previewResumenFormato.textContent = formatoSeleccionado.toUpperCase();
     }
 
+    if (previewResumenPresentacion) {
+        previewResumenPresentacion.textContent =
+            nombresPresentacionImpresion[presentacionSeleccionada];
+    }
+
     if (previewResumenCantidad) {
         previewResumenCantidad.textContent = obtenerTotalTablas();
     }
@@ -1190,6 +1230,7 @@ if (btnPagar) {
                 body: JSON.stringify({
                     cantidad: obtenerTotalTablas(),
                     formato: formatoSeleccionado,
+                    presentacion: presentacionSeleccionada,
                     diseno:
                         diseñoSeleccionado ||
                         sessionStorage.getItem("micelaneasstore_diseno") ||
@@ -1231,6 +1272,21 @@ if (btnPagar) {
 /* ==================================================
    INICIALIZACIÓN
 ================================================== */
+
+        const presentacionGuardada = sessionStorage.getItem("micelaneasstore_presentacion");
+if (nombresPresentacionImpresion[presentacionGuardada]) {
+    presentacionSeleccionada = presentacionGuardada;
+    document.querySelectorAll("[data-print-layout]").forEach(button => {
+        button.classList.toggle(
+            "active",
+            button.dataset.printLayout === presentacionSeleccionada
+        );
+    });
+    if (resumenPresentacion) {
+        resumenPresentacion.textContent =
+            nombresPresentacionImpresion[presentacionSeleccionada];
+    }
+}
 
 crearVistaTabla(formatoSeleccionado);
 actualizarTarjetasPorFormato();
