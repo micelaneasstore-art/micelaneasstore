@@ -983,8 +983,16 @@ const rangosPrecios = [
 ];
 
 const PRECIO_MAZO = 10;
+const PRECIO_PROMO_ESTRENO = 30;
+const FIN_PROMO_ESTRENO = new Date("2026-10-01T06:00:00Z").getTime();
+
+function promocionEstrenoActiva() {
+    return Date.now() < FIN_PROMO_ESTRENO;
+}
 
 function obtenerPrecioTablas(cantidad = obtenerTotalTablas()) {
+    if (promocionEstrenoActiva()) return PRECIO_PROMO_ESTRENO;
+
     const rango = rangosPrecios.find(item => cantidad <= item.hasta);
     return rango ? rango.precio : rangosPrecios[rangosPrecios.length - 1].precio;
 }
@@ -1004,8 +1012,15 @@ function actualizarResumenPago() {
     const cantidad = obtenerTotalTablas();
     const precioTablas = obtenerPrecioTablas(cantidad);
     const incluyeMazo = Boolean(agregarMazo?.checked);
-    const precioMazo = incluyeMazo ? PRECIO_MAZO : 0;
+    const precioMazo = incluyeMazo
+        ? (promocionEstrenoActiva() ? 0 : PRECIO_MAZO)
+        : 0;
     const total = precioTablas + precioMazo;
+
+    const addonPrice = document.querySelector(".addon-price");
+    if (addonPrice) {
+        addonPrice.textContent = promocionEstrenoActiva() ? "GRATIS" : `+${dinero(PRECIO_MAZO)}`;
+    }
 
     if (pagoCantidadTitulo) pagoCantidadTitulo.textContent = `${cantidad} tablas de lotería`;
     if (pagoDetalleTablas) {
@@ -1019,6 +1034,16 @@ function actualizarResumenPago() {
     sessionStorage.setItem("micelaneasstore_precio_tablas", precioTablas);
     sessionStorage.setItem("micelaneasstore_agregar_mazo", incluyeMazo ? "1" : "0");
     sessionStorage.setItem("micelaneasstore_total", total);
+}
+
+const promoEstrenoBanner = document.getElementById("promoEstrenoBanner");
+if (promoEstrenoBanner && !promocionEstrenoActiva()) {
+    promoEstrenoBanner.hidden = true;
+}
+
+const addonPriceInicial = document.querySelector(".addon-price");
+if (addonPriceInicial && promocionEstrenoActiva()) {
+    addonPriceInicial.textContent = "GRATIS";
 }
 
 if (agregarMazo) {

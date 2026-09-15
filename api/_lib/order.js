@@ -17,6 +17,16 @@ const RANGOS = [
 ];
 
 const PRECIO_MAZO = 10;
+
+// Promoción de estreno: $30 MXN por cualquier cantidad de 1 a 1000 tablas.
+// El mazo opcional no tiene costo adicional durante la promoción.
+// Termina automáticamente al iniciar el 1 de octubre de 2026, hora de Monterrey (UTC-6).
+const PRECIO_PROMO_ESTRENO = 30;
+const FIN_PROMO_ESTRENO = Date.parse("2026-10-01T06:00:00Z");
+
+function promocionEstrenoActiva(ahora = Date.now()) {
+    return ahora < FIN_PROMO_ESTRENO;
+}
 const DISENOS = new Set([
     "tradicional", "animada", "gorditos", "fiesta-mexicana",
     "dia-muertos", "san-valentin", "infantil", "vaquera",
@@ -142,6 +152,8 @@ function decodificarDistribucion(valor) {
 }
 
 function precioTablas(cantidad) {
+    if (promocionEstrenoActiva()) return PRECIO_PROMO_ESTRENO;
+
     const q = Math.max(1, Math.min(1000, Math.floor(Number(cantidad) || 1)));
     const rango = RANGOS.find(r => q <= r.hasta);
     return rango ? rango.precio : 180;
@@ -161,8 +173,9 @@ function normalizarPedido(input = {}) {
     const agregarMazo = Boolean(input.agregarMazo);
     const distribucion = normalizarDistribucion(input.distribucion, cantidad);
 
+    const promoEstreno = promocionEstrenoActiva();
     const subtotal = precioTablas(cantidad);
-    const mazo = agregarMazo ? PRECIO_MAZO : 0;
+    const mazo = agregarMazo ? (promoEstreno ? 0 : PRECIO_MAZO) : 0;
     const total = subtotal + mazo;
 
     return {

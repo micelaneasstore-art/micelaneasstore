@@ -67,7 +67,7 @@ module.exports = async function handler(req, res) {
             }
         ];
 
-        if (pedido.agregarMazo) {
+        if (pedido.agregarMazo && pedido.mazo > 0) {
             items.push({
                 id: "mazo-54",
                 title: "Mazo de 54 cartas",
