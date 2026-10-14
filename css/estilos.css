@@ -570,3 +570,5 @@
         aspect-ratio: 5 / 7;
     }
 }
+
+.preview-generated-3x3{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));}

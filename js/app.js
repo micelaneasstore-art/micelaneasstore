@@ -180,6 +180,7 @@ const nombresPresentacionImpresion = {
 };
 
 const patronesPorFormato = {
+    "3x3": { "sin-dobles": { titulo: "Sin dobles", celdas: [] } },
     "4x4": {
         "sin-dobles": {
             titulo: "Sin dobles",
@@ -254,7 +255,8 @@ const coleccionesImagenes = {
     vaquera: { ruta: "img/preview/Vaquera/", extension: ".webp", pad: true },
     "dia-madres": { ruta: "img/preview/DiaMadres/", extension: ".webp", pad: true },
     maestro: { ruta: "img/preview/Maestro/", extension: ".webp", pad: true },
-    navidad: { ruta: "img/preview/Navidad/", extension: ".webp", pad: true }
+    navidad: { ruta: "img/preview/Navidad/", extension: ".webp", pad: true },
+    "frutas-verduras": { ruta: "img/preview/frutas-verduras/", extension: ".webp", pad: true }
 };
 
 const nombresDisenos = {
@@ -268,7 +270,8 @@ const nombresDisenos = {
     vaquera: "Lotería Vaquera",
     "dia-madres": "Mamá Mexicana",
     maestro: "Día del Maestro",
-    navidad: "Lotería de Navidad"
+    navidad: "Lotería de Navidad",
+    "frutas-verduras": "Frutas y Verduras"
 };
 
 function obtenerConfiguracionColeccion() {
@@ -381,6 +384,15 @@ document.querySelectorAll("[data-format]").forEach(button => {
 crearVistaTabla(formatoSeleccionado);
 
         actualizarTarjetasPorFormato();
+        if (formatoSeleccionado === "3x3") {
+            distributionCards.forEach(card => {
+                const isSin = card.dataset.position === "sin-dobles";
+                card.classList.toggle("auto-selected", isSin);
+                const input = card.querySelector(".distribution-qty");
+                if (input) input.value = isSin ? obtenerTotalTablas() : 0;
+            });
+            actualizarDistribucion();
+        }
 
         /*
            Si estamos en modo automático, conservamos las presentaciones
@@ -439,14 +451,14 @@ function crearVistaTabla(formato) {
 
     tablePreview.innerHTML = "";
 
-    const cantidadCasillas = formato === "5x5" ? 25 : 16;
+    const cantidadCasillas = formato === "5x5" ? 25 : formato === "3x3" ? 9 : 16;
 
     if (formato === "5x5") {
-        tablePreview.classList.remove("preview-4x4");
+        tablePreview.classList.remove("preview-4x4", "preview-3x3");
         tablePreview.classList.add("preview-5x5");
     } else {
-        tablePreview.classList.remove("preview-5x5");
-        tablePreview.classList.add("preview-4x4");
+        tablePreview.classList.remove("preview-5x5", "preview-4x4", "preview-3x3");
+        tablePreview.classList.add(formato === "3x3" ? "preview-3x3" : "preview-4x4");
     }
 
     for (let i = 0; i < cantidadCasillas; i++) {
@@ -913,7 +925,14 @@ function actualizarTarjetasPorFormato() {
         const posicion = card.dataset.position;
         const patron = patrones?.[posicion];
 
-        if (!patron) return;
+        if (!patron) {
+            card.classList.remove("auto-selected");
+            card.classList.add("format-unavailable");
+            const input = card.querySelector(".distribution-qty");
+            if (input) { input.value = "0"; input.disabled = true; }
+            card.querySelectorAll(".distribution-counter button").forEach(b => b.disabled = true);
+            return;
+        }
 
         /* Actualizar posiciones reales que leerá el generador */
         card.dataset.cells = patron.celdas.join(",");
@@ -930,14 +949,14 @@ function actualizarTarjetasPorFormato() {
         if (miniGrid) {
             miniGrid.innerHTML = "";
 
-            miniGrid.classList.remove("mini-grid-4x4", "mini-grid-5x5");
+            miniGrid.classList.remove("mini-grid-4x4", "mini-grid-5x5", "mini-grid-3x3");
             miniGrid.classList.add(
                 formatoSeleccionado === "5x5"
                     ? "mini-grid-5x5"
-                    : "mini-grid-4x4"
+                    : formatoSeleccionado === "3x3" ? "mini-grid-3x3" : "mini-grid-4x4"
             );
 
-            const totalCeldas = formatoSeleccionado === "5x5" ? 25 : 16;
+            const totalCeldas = formatoSeleccionado === "5x5" ? 25 : formatoSeleccionado === "3x3" ? 9 : 16;
 
             for (let numero = 1; numero <= totalCeldas; numero++) {
                 const celda = document.createElement("span");
@@ -984,7 +1003,7 @@ const rangosPrecios = [
 
 const PRECIO_MAZO = 10;
 const PRECIO_PROMO_ESTRENO = 30;
-const FIN_PROMO_ESTRENO = new Date("2026-10-01T06:00:00Z").getTime();
+const FIN_PROMO_ESTRENO = new Date("2026-12-01T06:00:00Z").getTime();
 
 function promocionEstrenoActiva() {
     return Date.now() < FIN_PROMO_ESTRENO;
@@ -1101,14 +1120,14 @@ function generarMuestraPaso3() {
     if (!generatedTablePreview) return;
 
     const tipo = elegirDistribucionParaMuestra();
-    const totalCasillas = formatoSeleccionado === "5x5" ? 25 : 16;
+    const totalCasillas = formatoSeleccionado === "5x5" ? 25 : formatoSeleccionado === "3x3" ? 9 : 16;
     const patron = tipo
         ? patronesPorFormato[formatoSeleccionado]?.[tipo.posicion]
         : patronesPorFormato[formatoSeleccionado]?.["sin-dobles"];
 
     const posicionesDobles = patron?.celdas || [];
     const cantidadUnicas = totalCasillas - (posicionesDobles.length > 0 ? 1 : 0);
-    const figuras = numerosAleatoriosUnicos(cantidadUnicas);
+    const figuras = numerosAleatoriosUnicos(cantidadUnicas, diseñoSeleccionado === "frutas-verduras" ? 40 : 54);
     const valores = [];
 
     let indiceFigura = 0;
@@ -1129,12 +1148,12 @@ function generarMuestraPaso3() {
     generatedTablePreview.innerHTML = "";
     generatedTablePreview.classList.remove(
         "preview-generated-4x4",
-        "preview-generated-5x5"
+        "preview-generated-5x5", "preview-generated-3x3"
     );
     generatedTablePreview.classList.add(
         formatoSeleccionado === "5x5"
             ? "preview-generated-5x5"
-            : "preview-generated-4x4"
+            : formatoSeleccionado === "3x3" ? "preview-generated-3x3" : "preview-generated-4x4"
     );
 
     const configColeccion = obtenerConfiguracionColeccion();

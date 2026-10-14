@@ -20,7 +20,7 @@ module.exports = async function handler(req, res) {
 
     const pdf = await crearPdfMazo(payload);
     const pathname = nombreSeguro(
-      `pedidos/${payload.pid}/mazo-${payload.d}-54-cartas.pdf`
+      `pedidos/${payload.pid}/mazo-${payload.d}-${payload.d === "frutas-verduras" ? 40 : 54}-cartas.pdf`
     );
 
     const { presignedUrl, validUntil } = await guardarYFirmar({

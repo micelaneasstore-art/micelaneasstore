@@ -1511,3 +1511,13 @@ HERO
     .whatsapp-float-text { display: none; }
     .whatsapp-float-icon { font-size: 1.5rem; }
 }
+
+/* Formato infantil 3x3 */
+.preview-3x3,.mini-grid-3x3,.preview-generated-3x3{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));}
+
+/* Mostrar fotografías destacadas completas, sin recortar */
+.design-card[data-design="dia-muertos"] .design-image img,
+.design-card[data-design="navidad"] .design-image img { object-fit: contain; background: #fff8ef; }
+/* Vistas previas de colecciones: carta completa con marca de agua */
+.collection-card[data-design="gorditos"] img,
+.collection-card[data-design="animada"] img { object-fit: contain !important; background: #fff8ef; }

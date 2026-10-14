@@ -2,6 +2,7 @@ const { PDFDocument, rgb, StandardFonts } = require("pdf-lib");
 const { cargarPaqueteColeccion } = require("./blob-assets");
 
 const PATRONES = {
+  "3x3": { "sin-dobles": [] },
   "4x4": {
     "sin-dobles": [],
     "seguidas-arriba": [6, 7],
@@ -85,8 +86,8 @@ function expandirDistribucion(distribucion) {
   return salida;
 }
 
-function generarSecuenciaComodines(cantidad, rng) {
-  const cartas = Array.from({ length: 54 }, (_, i) => i + 1);
+function generarSecuenciaComodines(cantidad, rng, totalCartas = 54) {
+  const cartas = Array.from({ length: totalCartas }, (_, i) => i + 1);
   const salida = [];
   let ultimo = null;
 
@@ -100,7 +101,7 @@ function generarSecuenciaComodines(cantidad, rng) {
     }
 
     const faltan = cantidad - salida.length;
-    const tramo = ciclo.slice(0, Math.min(54, faltan));
+    const tramo = ciclo.slice(0, Math.min(totalCartas, faltan));
     salida.push(...tramo);
     ultimo = tramo[tramo.length - 1];
   }
@@ -114,12 +115,12 @@ function generarSecuenciaComodines(cantidad, rng) {
 // Si el pedido tiene menos de 54 tablas, las figuras de esa posición se eligen
 // al azar sin repetirse. Si el pedido tiene 54 o más, se usan consecutivamente
 // 1..54 y se reinicia el ciclo.
-function generarSecuenciaSinDobles(cantidadSinDobles, totalPedido, rng) {
+function generarSecuenciaSinDobles(cantidadSinDobles, totalPedido, rng, totalCartas = 54) {
   if (cantidadSinDobles <= 0) return [];
 
-  const cartas = Array.from({ length: 54 }, (_, i) => i + 1);
+  const cartas = Array.from({ length: totalCartas }, (_, i) => i + 1);
 
-  if (Number(totalPedido) < 54) {
+  if (Number(totalPedido) < totalCartas) {
     // Como cantidadSinDobles <= totalPedido < 54, basta un solo ciclo mezclado
     // para garantizar que no se repita ninguna figura controlada.
     return mezclar(cartas, rng).slice(0, cantidadSinDobles);
@@ -127,13 +128,13 @@ function generarSecuenciaSinDobles(cantidadSinDobles, totalPedido, rng) {
 
   // En pedidos de 54 o más tablas, la distribución es totalmente equilibrada
   // y consecutiva: 1,2,...,54,1,2,...
-  return Array.from({ length: cantidadSinDobles }, (_, i) => (i % 54) + 1);
+  return Array.from({ length: cantidadSinDobles }, (_, i) => (i % totalCartas) + 1);
 }
 
-function generarTabla({ formato, tipo, rng, firmas, comodinForzado = null, virtualForzado = null }) {
-  const total = formato === "5x5" ? 25 : 16;
+function generarTabla({ formato, tipo, rng, firmas, comodinForzado = null, virtualForzado = null, totalCartas = 54 }) {
+  const total = formato === "5x5" ? 25 : formato === "3x3" ? 9 : 16;
   const dobles = PATRONES[formato]?.[tipo] || [];
-  const cartas = Array.from({ length: 54 }, (_, i) => i + 1);
+  const cartas = Array.from({ length: totalCartas }, (_, i) => i + 1);
 
   for (let intento = 0; intento < 5000; intento++) {
     const celdas = Array(total).fill(null);
@@ -181,7 +182,9 @@ function generarTabla({ formato, tipo, rng, firmas, comodinForzado = null, virtu
 }
 
 function generarTablas(payload) {
+  const totalCartas = payload.d === "frutas-verduras" ? 40 : 54;
   const tipos = expandirDistribucion(payload.r);
+  if (payload.f === "3x3" && tipos.some(t => t !== "sin-dobles")) throw new Error("El formato 3x3 solo admite tablas sin dobles.");
   if (tipos.length !== Number(payload.q)) {
     throw new Error("La distribución comprada no coincide con la cantidad de tablas.");
   }
@@ -197,11 +200,12 @@ function generarTablas(payload) {
   ).length;
   const cantidadSinDobles = tipos.length - cantidadConDobles;
 
-  const comodines = generarSecuenciaComodines(cantidadConDobles, rngComodines);
+  const comodines = generarSecuenciaComodines(cantidadConDobles, rngComodines, totalCartas);
   const virtualesSinDobles = generarSecuenciaSinDobles(
     cantidadSinDobles,
     Number(payload.q),
-    rngSinDobles
+    rngSinDobles,
+    totalCartas
   );
 
   let indiceComodin = 0;
@@ -218,7 +222,8 @@ function generarTablas(payload) {
       rng,
       firmas,
       comodinForzado,
-      virtualForzado
+      virtualForzado,
+      totalCartas
     });
   });
 }
@@ -227,7 +232,7 @@ async function cargarCartas(pdf, diseno) {
   const bytesPorCarta = await cargarPaqueteColeccion(diseno);
   const mapa = new Map();
 
-  for (let n = 1; n <= 54; n++) {
+  for (let n = 1; n <= (diseno === "frutas-verduras" ? 40 : 54); n++) {
     const bytes = bytesPorCarta.get(n);
     if (!bytes) throw new Error(`Falta la carta ${n} de ${diseno}.`);
     const img = await pdf.embedPng(bytes);
@@ -250,7 +255,7 @@ function dibujarContain(page, img, x, y, w, h, padding = 1.5) {
 }
 
 function dibujarTablaEnPanel({ page, tabla, index, formato, cartas, font, fontBold, x0, y0, w, h }) {
-  const cols = formato === "5x5" ? 5 : 4;
+  const cols = formato === "5x5" ? 5 : formato === "3x3" ? 3 : 4;
   const rows = cols;
 
   // Márgenes compactos para aprovechar mejor el papel impreso.
@@ -429,10 +434,10 @@ async function crearPdfMazo(payload) {
   const cellW = (pageW - marginX * 2 - gap * (cols - 1)) / cols;
   const cellH = (pageH - marginY * 2 - gap * (rows - 1)) / rows;
 
-  for (let start = 1; start <= 54; start += 9) {
+  for (let start = 1; start <= (payload.d === "frutas-verduras" ? 40 : 54); start += 9) {
     const page = pdf.addPage([pageW, pageH]);
 
-    for (let k = 0; k < 9 && start + k <= 54; k++) {
+    for (let k = 0; k < 9 && start + k <= (payload.d === "frutas-verduras" ? 40 : 54); k++) {
       const numero = start + k;
       const col = k % cols;
       const row = Math.floor(k / cols);

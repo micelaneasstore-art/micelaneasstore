@@ -3,7 +3,7 @@ const { unzipSync } = require("fflate");
 const COLECCIONES = new Set([
   "tradicional", "animada", "gorditos", "fiesta-mexicana",
   "dia-muertos", "san-valentin", "infantil", "vaquera",
-  "dia-madres", "maestro", "navidad"
+  "dia-madres", "maestro", "navidad", "frutas-verduras"
 ]);
 const cache = new Map();
 
@@ -42,7 +42,7 @@ async function cargarPaqueteColeccion(diseno) {
     const archivos = unzipSync(new Uint8Array(zipBytes));
     const cartas = new Map();
 
-    for (let n = 1; n <= 54; n++) {
+    for (let n = 1; n <= (diseno === "frutas-verduras" ? 40 : 54); n++) {
       const nombre = `${n}.png`;
       const bytes = archivos[nombre];
       if (!bytes) {

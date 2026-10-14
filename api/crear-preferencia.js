@@ -46,7 +46,8 @@ module.exports = async function handler(req, res) {
             vaquera: "Lotería Vaquera",
             "dia-madres": "Mamá Mexicana",
             maestro: "Día del Maestro",
-            navidad: "Lotería de Navidad"
+            navidad: "Lotería de Navidad",
+            "frutas-verduras": "Frutas y Verduras"
         };
 
         const nombresPresentacion = {
@@ -70,7 +71,7 @@ module.exports = async function handler(req, res) {
         if (pedido.agregarMazo && pedido.mazo > 0) {
             items.push({
                 id: "mazo-54",
-                title: "Mazo de 54 cartas",
+                title: "Mazo de cartas",
                 description: `Mazo imprimible - ${nombres[pedido.diseno]}`,
                 quantity: 1,
                 currency_id: "MXN",

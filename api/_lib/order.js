@@ -22,7 +22,7 @@ const PRECIO_MAZO = 10;
 // El mazo opcional no tiene costo adicional durante la promoción.
 // Termina automáticamente al iniciar el 1 de octubre de 2026, hora de Monterrey (UTC-6).
 const PRECIO_PROMO_ESTRENO = 30;
-const FIN_PROMO_ESTRENO = Date.parse("2026-10-01T06:00:00Z");
+const FIN_PROMO_ESTRENO = Date.parse("2026-12-01T06:00:00Z");
 
 function promocionEstrenoActiva(ahora = Date.now()) {
     return ahora < FIN_PROMO_ESTRENO;
@@ -30,9 +30,9 @@ function promocionEstrenoActiva(ahora = Date.now()) {
 const DISENOS = new Set([
     "tradicional", "animada", "gorditos", "fiesta-mexicana",
     "dia-muertos", "san-valentin", "infantil", "vaquera",
-    "dia-madres", "maestro", "navidad"
+    "dia-madres", "maestro", "navidad", "frutas-verduras"
 ]);
-const FORMATOS = new Set(["4x4", "5x5"]);
+const FORMATOS = new Set(["3x3", "4x4", "5x5"]);
 const PRESENTACIONES = new Set([
     "carta-2-horizontal",
     "carta-4-vertical",
@@ -61,7 +61,8 @@ const DISENO_CODE = {
     vaquera: "v",
     "dia-madres": "r",
     maestro: "m",
-    navidad: "n"
+    navidad: "n",
+    "frutas-verduras": "f"
 };
 
 const CODE_DISENO = {
@@ -75,15 +76,18 @@ const CODE_DISENO = {
     v: "vaquera",
     r: "dia-madres",
     m: "maestro",
-    n: "navidad"
+    n: "navidad",
+    f: "frutas-verduras"
 };
 
 const FORMATO_CODE = {
+    "3x3": "3",
     "4x4": "4",
     "5x5": "5"
 };
 
 const CODE_FORMATO = {
+    "3": "3x3",
     "4": "4x4",
     "5": "5x5"
 };
@@ -173,6 +177,9 @@ function normalizarPedido(input = {}) {
     const agregarMazo = Boolean(input.agregarMazo);
     const distribucion = normalizarDistribucion(input.distribucion, cantidad);
 
+    if (formato === "3x3" && Object.entries(distribucion).some(([tipo, n]) => tipo !== "sin-dobles" && n > 0)) {
+        throw new Error("El formato 3x3 solo admite tablas sin dobles.");
+    }
     const promoEstreno = promocionEstrenoActiva();
     const subtotal = precioTablas(cantidad);
     const mazo = agregarMazo ? (promoEstreno ? 0 : PRECIO_MAZO) : 0;
