@@ -21,7 +21,7 @@
     <section id="descargas" class="download-section" hidden>
       <h2>Tus archivos</h2>
       <p class="download-help">
-        Los enlaces se habilitan únicamente después de validar el pago.
+        Tu pago fue validado. Pulsa «Generar y descargar» para guardar tus archivos; la preparación puede tardar un poco.
       </p>
 
       <div class="download-grid">
@@ -40,7 +40,7 @@
             <strong>Tablas de lotería</strong>
             <small>PDF comprado</small>
           </span>
-          <b>Generar PDF</b>
+          <b>Generar y descargar</b>
         </button>
 
         <button id="btnMazo" class="download-card" type="button" hidden>
@@ -49,11 +49,11 @@
             <strong>Mazo de 54 cartas</strong>
             <small>PDF imprimible</small>
           </span>
-          <b>Generar PDF</b>
+          <b>Generar y descargar</b>
         </button>
       </div>
 
-      <p class="download-notice" id="mensajeGenerador">
+      <p class="download-notice" id="mensajeGenerador" role="status" aria-live="polite">
         Tus archivos se generan con las imágenes originales y un enlace temporal protegido.
       </p>
     </section>
@@ -105,7 +105,7 @@
         titulo.textContent = "¡Pago confirmado!";
         titulo.className = "status-ok";
         texto.textContent =
-            "Tu compra fue validada correctamente y ya tiene autorización de descarga.";
+            "Tu compra fue validada correctamente. Puedes generar y descargar tus archivos aquí. También recibirás el enlace de descarga en tu correo.";
 
         resumen.hidden = false;
         resumen.innerHTML = `
@@ -132,15 +132,17 @@
             boton.disabled = true;
             const etiqueta = boton.querySelector("b");
             const anterior = etiqueta.textContent;
-            etiqueta.textContent = "Generando…";
+            etiqueta.textContent = "Preparando…";
+            boton.classList.add("download-pending");
+            mensajeGenerador.setAttribute("role", "status");
             mensajeGenerador.textContent = textoInicial;
 
             try {
                 const rr = await fetch(`${endpoint}?token=${encodeURIComponent(data.token)}`);
                 const dd = await rr.json();
                 if (!rr.ok || !dd.url) throw new Error(dd.error || "No se pudo generar el archivo.");
-                etiqueta.textContent = "Descargar";
-                mensajeGenerador.textContent = "Archivo listo. El enlace de descarga es temporal por seguridad.";
+                etiqueta.textContent = "Descargar de nuevo";
+                mensajeGenerador.textContent = "Archivo preparado. Iniciando descarga…";
                 const archivo = await fetch(dd.url);
                 if (!archivo.ok) {
                     throw new Error("El PDF se generó, pero no se pudo iniciar la descarga.");
@@ -158,11 +160,13 @@
                 enlace.remove();
 
                 setTimeout(() => URL.revokeObjectURL(urlLocal), 30000);
+                mensajeGenerador.textContent = "Descarga iniciada. Revisa la carpeta Descargas de tu dispositivo. Puedes volver a descargarlo si lo necesitas.";
             } catch (err) {
                 etiqueta.textContent = anterior;
                 mensajeGenerador.textContent = err.message || "No se pudo generar el archivo.";
             } finally {
                 boton.disabled = false;
+                boton.classList.remove("download-pending");
                 boton.dataset.generando = "0";
             }
         };

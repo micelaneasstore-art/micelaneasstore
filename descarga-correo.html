@@ -20,7 +20,7 @@
 
     <section id="descargas" class="download-section" hidden>
       <h2>Tus archivos</h2>
-      <p class="download-help">Pulsa cada archivo para generarlo y guardarlo en tu dispositivo.</p>
+      <p class="download-help">Pulsa «Generar y descargar» para preparar y guardar cada PDF en tu dispositivo. Puede tardar un poco según la cantidad de tablas.</p>
 
       <div class="download-grid">
         <a id="btnGuia" class="download-card" href="#">
@@ -32,17 +32,17 @@
         <button id="btnTablas" class="download-card" type="button">
           <span class="download-icon">📄</span>
           <span><strong>Tablas de lotería</strong><small>PDF comprado</small></span>
-          <b>Generar PDF</b>
+          <b>Generar y descargar</b>
         </button>
 
         <button id="btnMazo" class="download-card" type="button" hidden>
           <span class="download-icon">🃏</span>
           <span><strong>Mazo de 54 cartas</strong><small>PDF imprimible</small></span>
-          <b>Generar PDF</b>
+          <b>Generar y descargar</b>
         </button>
       </div>
 
-      <p class="download-notice" id="mensajeGenerador">Los archivos se generan con un enlace temporal protegido.</p>
+      <p class="download-notice" id="mensajeGenerador" role="status" aria-live="polite">Los archivos se generan con un enlace temporal protegido.</p>
     </section>
 
     <div class="result-actions">
@@ -95,7 +95,7 @@
         tradicional:"Tradicional", animada:"Animada", gorditos:"Gorditos",
         "fiesta-mexicana":"Fiesta Mexicana", "dia-muertos":"Día de Muertos",
         "san-valentin":"San Valentín", infantil:"Infantil", vaquera:"Vaquera",
-        "dia-madres":"Día de las Madres", maestro:"Maestro", navidad:"Navidad"
+        "dia-madres":"Día de las Madres", maestro:"Maestro", navidad:"Navidad", "frutas-verduras":"Frutas y Verduras"
     };
     const presentaciones = {
         "carta-2-horizontal":"2 por hoja · Carta horizontal",
@@ -116,7 +116,7 @@
     `;
     descargas.hidden = false;
     btnGuia.href = `/api/descargar-guia?token=${encodeURIComponent(token)}`;
-    if (p.m === 1) btnMazo.hidden = false;
+    if (p.m === 1) { btnMazo.hidden = false; btnMazo.querySelector("strong").textContent = `Mazo de ${p.d === "frutas-verduras" ? 40 : 54} cartas`; }
 
     const generar = async (boton, endpoint, textoInicial) => {
         if (boton.dataset.generando === "1") return;
@@ -124,7 +124,9 @@
         boton.disabled = true;
         const etiqueta = boton.querySelector("b");
         const anterior = etiqueta.textContent;
-        etiqueta.textContent = "Generando…";
+        etiqueta.textContent = "Preparando…";
+            boton.classList.add("download-pending");
+            mensajeGenerador.setAttribute("role", "status");
         mensajeGenerador.textContent = textoInicial;
 
         try {
@@ -145,19 +147,20 @@
             enlace.remove();
             setTimeout(() => URL.revokeObjectURL(urlLocal), 30000);
 
-            etiqueta.textContent = "Descargar";
-            mensajeGenerador.textContent = "Archivo listo y descargado. Guárdalo en tu dispositivo.";
+            etiqueta.textContent = "Descargar de nuevo";
+            mensajeGenerador.textContent = "Descarga iniciada. Revisa la carpeta Descargas de tu dispositivo. Puedes volver a descargarlo si lo necesitas.";
         } catch (error) {
             etiqueta.textContent = anterior;
             mensajeGenerador.textContent = error.message || "No se pudo generar el archivo.";
         } finally {
             boton.disabled = false;
+                boton.classList.remove("download-pending");
             boton.dataset.generando = "0";
         }
     };
 
     btnTablas.addEventListener("click", () => generar(btnTablas, "/api/descargar-tablas", `Generando ${p.q} tablas ${String(p.f).toUpperCase()}…`));
-    btnMazo.addEventListener("click", () => generar(btnMazo, "/api/descargar-mazo", "Generando el mazo de 54 cartas…"));
+    btnMazo.addEventListener("click", () => generar(btnMazo, "/api/descargar-mazo", `Preparando el mazo de ${p.d === "frutas-verduras" ? 40 : 54} cartas…`));
 })();
 </script>
 </body>

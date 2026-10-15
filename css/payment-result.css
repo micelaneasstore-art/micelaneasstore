@@ -135,3 +135,24 @@ body{
     color:#795b10 !important;
     font-size:.8rem;
 }
+
+/* Mejoras para las descargas, especialmente en celulares */
+*, *::before, *::after { box-sizing: border-box; }
+.download-card { cursor: pointer; transition: background .15s ease, border-color .15s ease; }
+.download-card:focus-visible, .result-btn:focus-visible { outline: 3px solid #1369a7; outline-offset: 3px; }
+.download-card:disabled { cursor: progress; }
+.download-card b { text-align: right; line-height: 1.35; }
+@media (max-width: 600px) {
+  .result-wrap { padding: 12px; display: block; }
+  .result-card { padding: 19px 15px; border-radius: 15px; }
+  .result-card h1 { font-size: 1.45rem; line-height: 1.3; }
+  .result-summary { margin: 16px 0; padding: 12px; }
+  .result-row { gap: 12px; font-size: .85rem; align-items: baseline; }
+  .result-row strong { text-align: right; overflow-wrap: anywhere; }
+  .download-section { margin-top: 18px; padding-top: 17px; }
+  .download-card { grid-template-columns: 30px minmax(0, 1fr); gap: 9px 11px; padding: 12px; }
+  .download-card b { grid-column: 2; text-align: left; }
+  .download-card strong { font-size: .88rem; }
+  .download-card small { font-size: .75rem; }
+  .result-actions .result-btn { width: 100%; }
+}

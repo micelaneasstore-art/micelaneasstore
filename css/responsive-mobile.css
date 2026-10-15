@@ -477,3 +477,14 @@
     .hero-buttons{ grid-template-columns:1fr; }
     .config-options-grid{ grid-template-columns:1fr; }
 }
+
+/* MicelaneasStore: ajustes de legibilidad y espacio para crear en celular */
+@media (max-width: 600px) {
+  #paso2 .config-section { margin-bottom: 16px; }
+  #paso2 .config-help { margin-top: 5px; margin-bottom: 10px; line-height: 1.45; }
+  #paso2 .config-options-grid { gap: 8px; }
+  #paso2 .config-option { min-height: 62px; padding: 10px 8px; }
+  #paso2 .config-option span { line-height: 1.25; }
+  #paso2 .distribution-card { padding: 11px; }
+  #paso2 .configuration-preview { padding: 12px; }
+}
