@@ -1,0 +1,20 @@
+MICELANEASSTORE - PAYPAL SANDBOX (PRUEBAS)
+
+Este parche no modifica Mercado Pago ni los precios.
+
+1. Copia los archivos respetando la estructura de carpetas en C:\proyecto\micelaneasstore.
+2. Verifica en Vercel Production: PAYPAL_CLIENT_ID, PAYPAL_CLIENT_SECRET, PAYPAL_ENV=sandbox y PUBLIC_BASE_URL.
+3. Haz Commit y Push origin. Espera el despliegue.
+4. Abre https://www.micelaneasstore.com/crear.html?paypal_test=1
+5. Configura una lotería y en el paso Pago usa 'Probar pago con PayPal'.
+6. Inicia sesión con una cuenta COMPRADOR de PayPal Sandbox, no con tu cuenta real.
+7. Después de aprobar se debe abrir la página de descargas y enviarse correo.
+8. Comprueba PDF de tablas y mazo, el total $30, el correo y que Mercado Pago sigue normal.
+
+IMPORTANTE:
+- PayPal Sandbox no acepta dinero real.
+- La opción PayPal no aparece en la página normal, solo con ?paypal_test=1.
+- NO cambiar PAYPAL_ENV a live con este parche. El backend lo bloquea intencionalmente.
+- Para producción faltará habilitar Live, revisar divisas/comisiones y configurar webhooks para reintentos fiables de correo si el comprador no regresa al sitio.
+- El correo PayPal se envía tras captura exitosa al regresar al sitio. Si el cliente no regresa, falta webhook para entrega automática independiente del navegador.
+- No copies claves privadas en archivos ni las compartas por chat.

@@ -1364,3 +1364,22 @@ if (nombresPresentacionImpresion[presentacionGuardada]) {
 crearVistaTabla(formatoSeleccionado);
 actualizarTarjetasPorFormato();
 actualizarDistribucion();
+
+/* PayPal Sandbox: opción de prueba visible solo con ?paypal_test=1. */
+const paypalTestActivo = new URLSearchParams(location.search).get("paypal_test") === "1";
+const paypalSandboxOption = document.getElementById("paypalSandboxOption");
+if (paypalTestActivo && paypalSandboxOption) paypalSandboxOption.hidden = false;
+const btnPagarPayPal = document.getElementById("btnPagarPayPal");
+btnPagarPayPal?.addEventListener("click", async () => {
+  btnPagarPayPal.disabled=true; btnPagarPayPal.textContent="Preparando PayPal Sandbox…";
+  try {
+    const response=await fetch("/api/paypal-crear-orden",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({
+      cantidad:obtenerTotalTablas(),formato:formatoSeleccionado,presentacion:presentacionSeleccionada,
+      diseno:diseñoSeleccionado||sessionStorage.getItem("micelaneasstore_diseno")||"tradicional",
+      agregarMazo:Boolean(agregarMazo?.checked),
+      distribucion:Object.fromEntries([...distributionCards].map(card=>[card.dataset.position,leerCantidadTarjeta(card)]))
+    })});
+    const data=await response.json();if(!response.ok||!data.approve_url)throw Error(data.error||"No fue posible crear la orden PayPal.");
+    location.href=data.approve_url;
+  }catch(error){alert("PayPal Sandbox: "+error.message);btnPagarPayPal.disabled=false;btnPagarPayPal.textContent="Probar pago con PayPal";}
+});
