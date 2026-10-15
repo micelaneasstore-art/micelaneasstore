@@ -1,0 +1,9 @@
+PARCHE PAYPAL LIVE - MicelaneasStore
+1. Copia los archivos a la raíz del proyecto conservando las carpetas.
+2. Haz Commit y Push origin. Verifica despliegue correcto.
+3. Antes de cambiar credenciales, confirma que https://www.micelaneasstore.com/api/paypal-estado devuelve {"disponible":false} y que PayPal no aparece en crear.html.
+4. En Vercel Production reemplaza PAYPAL_CLIENT_ID y PAYPAL_CLIENT_SECRET por credenciales LIVE y PAYPAL_ENV por live. Redeploy.
+5. Comprueba /api/paypal-estado (true), PayPal visible y prueba una compra real de bajo importe; revisa cobro, descarga y correo.
+6. No compartas Secret Key ni captures datos sensibles.
+IMPORTANTE: este parche no modifica Mercado Pago, los precios ni los generadores. El checkout PayPal cobra en MXN; verifica que tu cuenta Business pueda recibir MXN y comisiones para pagos internacionales.
+Rollback: PAYPAL_ENV=sandbox y redeploy oculta el botón PayPal público.

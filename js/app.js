@@ -1365,13 +1365,17 @@ crearVistaTabla(formatoSeleccionado);
 actualizarTarjetasPorFormato();
 actualizarDistribucion();
 
-/* PayPal Sandbox: opción de prueba visible solo con ?paypal_test=1. */
-const paypalTestActivo = new URLSearchParams(location.search).get("paypal_test") === "1";
+/* PayPal se muestra públicamente solo cuando el servidor confirma modo Live. */
 const paypalSandboxOption = document.getElementById("paypalSandboxOption");
-if (paypalTestActivo && paypalSandboxOption) paypalSandboxOption.hidden = false;
+if (paypalSandboxOption) {
+  fetch("/api/paypal-estado", {cache:"no-store"})
+    .then(r => r.ok ? r.json() : null)
+    .then(data => { paypalSandboxOption.hidden = !(data && data.disponible); })
+    .catch(() => { paypalSandboxOption.hidden = true; });
+}
 const btnPagarPayPal = document.getElementById("btnPagarPayPal");
 btnPagarPayPal?.addEventListener("click", async () => {
-  btnPagarPayPal.disabled=true; btnPagarPayPal.textContent="Preparando PayPal Sandbox…";
+  btnPagarPayPal.disabled=true; btnPagarPayPal.textContent="Preparando PayPal…";
   try {
     const response=await fetch("/api/paypal-crear-orden",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({
       cantidad:obtenerTotalTablas(),formato:formatoSeleccionado,presentacion:presentacionSeleccionada,
@@ -1381,5 +1385,5 @@ btnPagarPayPal?.addEventListener("click", async () => {
     })});
     const data=await response.json();if(!response.ok||!data.approve_url)throw Error(data.error||"No fue posible crear la orden PayPal.");
     location.href=data.approve_url;
-  }catch(error){alert("PayPal Sandbox: "+error.message);btnPagarPayPal.disabled=false;btnPagarPayPal.textContent="Probar pago con PayPal";}
+  }catch(error){alert("PayPal: "+error.message);btnPagarPayPal.disabled=false;btnPagarPayPal.textContent="Pagar con PayPal";}
 });

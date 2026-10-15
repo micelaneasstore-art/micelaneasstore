@@ -3,7 +3,7 @@ const {crearTokenDescarga}=require("./_lib/delivery");
 const {enviarCorreoPedido}=require("./_lib/email-pedido");
 module.exports=async(req,res)=>{
  if(req.method!=="POST")return res.status(405).json({error:"Método no permitido"});
- if(!habilitado())return res.status(503).json({error:"PayPal Sandbox no está habilitado."});
+ if(!habilitado())return res.status(503).json({error:"PayPal no está habilitado."});
  const id=String(req.body?.order_id||"");
  if(!/^[A-Z0-9-]{8,40}$/.test(id))return res.status(400).json({error:"Identificador de orden inválido."});
  try {
